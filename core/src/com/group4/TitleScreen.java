@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -43,9 +45,20 @@ public class TitleScreen extends ScreenAdapter {
         table.add(logo).pad(10).fillY().align(Align.center);
         table.row();
 
-        //Create the start game button. and add it to the table
+        //Create the start game button, add it to the table and it click event
         Button startButton = new TextButton("Start Game", game.skin);
         table.add(startButton).pad(50).fillX().fillY();
+        startButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                //As per libGDX docs this is needed to return true for the touchup event to trigger
+                return true;
+            }
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new GameScreen(game));
+            }
+        });
 
         stage.addActor(table);
     }
