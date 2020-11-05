@@ -5,8 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Map {
     public int[][] intMap;
     public Set<Actor>[][] objMap;
-    final int wall = 1;
-    final int empty = 0;
+    final int WALL = 1;
+    final int EMPTY = 0;
+    final int HEAL = 2;
 
     public Map(int[][] intMap){
         this.intMap = intMap;
@@ -32,11 +33,8 @@ public class Map {
     //     pass
     // }
     public boolean Empty(int x, int y){//is the tile empty
-        System.out.print(x);
-        System.out.print(",");
-        System.out.println(y);
         if (InBounds(x,y)){
-            return intMap[x][y] == empty;
+            return intMap[x][y] != WALL;
         } else{
             return false;
         }
@@ -46,6 +44,16 @@ public class Map {
         for (int i = gridPos(x); i <= gridPos(x + w); i++) {
             for (int j = gridPos(y); j <= gridPos(y + h); j++) {
                 if (!Empty(i,j)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public boolean Effect(int effect,float x, float y, float w, float h){//
+        for (int i = gridPos(x); i <= gridPos(x + w); i++) {
+            for (int j = gridPos(y); j <= gridPos(y + h); j++) {
+                if (intMap[i][j] != effect){
                     return false;
                 }
             }
