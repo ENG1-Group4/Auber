@@ -17,6 +17,17 @@ public class Map {
             }
         }
     }
+    public Map(String strMap){
+        String lines[] = strMap.split("\n");
+        intMap = new int[lines.length][];
+        for (int i = 0; i < lines.length; i++) {
+            String line[] = lines[i].split("");
+            intMap[i]= new int[line.length];
+            for (int j = 0; j < line.length; j++){
+                intMap[i][j] = Integer.parseInt(line[j]);
+            }
+        }
+    }
     // public Map(String strMap){//create a map from a string (for file storage etc.)
     //     pass
     // }
