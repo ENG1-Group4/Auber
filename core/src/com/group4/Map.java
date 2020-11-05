@@ -101,7 +101,7 @@ public class Map {
         objMap[x][y].remove(entity);
     }
     public int gridPos(float pixelPos){//converts position in pixels to position in grid
-        return (int) pixelPos/16;//(pixelPos - pixelPos%16)/16;
+        return (int) pixelPos/32;//(pixelPos - pixelPos%32)/32;
     }
     public void autoLeave(Actor entity){//Leave all required tiles for this entity
         float x = entity.getX();
@@ -129,6 +129,6 @@ public class Map {
     public static void main (String[] arg) {
         int[][] mapRepr = {{1,1,1},{1,0,1},{1,0,1},{1,1,1}};
         Map x = new Map(mapRepr);
-        System.out.print(x.Empty(16f,16f,15f,15f));
+        System.out.print(x.Empty(32f,32f,31f,31f));
 	}
 }
