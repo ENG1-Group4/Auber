@@ -129,6 +129,5 @@ public class Map {
     public static void main (String[] arg) {
         int[][] mapRepr = {{1,1,1},{1,0,1},{1,0,1},{1,1,1}};
         Map x = new Map(mapRepr);
-        System.out.print(x.Empty(32f,32f,31f,31f));
 	}
 }
