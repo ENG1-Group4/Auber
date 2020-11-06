@@ -15,7 +15,7 @@ public class GameScreen extends ScreenAdapter {
 
     public AuberGame game;
     private Stage stage;
-
+    private Player player;
     public GameScreen (AuberGame game){
         this.game = game;
     }
@@ -26,6 +26,9 @@ public class GameScreen extends ScreenAdapter {
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
 
+        //Create the player and add it to the stage
+        player = new Player();
+        stage.addActor(player);
 
     }
 
