@@ -24,6 +24,20 @@ public class Player extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
+        //Move the player by a set amount if the keys are pressed.
+        if(Gdx.input.isKeyPressed(Input.Keys.W)){
+            moveBy(0,playerSpeed);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.S)){
+            moveBy(0,-playerSpeed);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.A)){
+            moveBy(-playerSpeed,0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.D)){
+            moveBy(playerSpeed,0);
+        }
+
         //Draw the image
         batch.draw(image, getX(), getY(), image.getWidth(), image.getHeight());
     }
