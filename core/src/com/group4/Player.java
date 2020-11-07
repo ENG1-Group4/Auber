@@ -41,6 +41,8 @@ public class Player extends Actor {
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             deltaX += playerSpeed;
         }
+
+        //Check the space is empty before moving into it
         if (map.Empty(getX() + deltaX, getY(), image.getHeight(), image.getHeight())){
             moveBy(deltaX, 0);
         }
