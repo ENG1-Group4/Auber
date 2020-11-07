@@ -21,11 +21,13 @@ public class Map {
     public Map(String strMap){
         String lines[] = strMap.split("\n");
         intMap = new int[lines.length][];
+        objMap = new HashSet[intMap.length][intMap[0].length];
         for (int i = 0; i < lines.length; i++) {
             String line[] = lines[i].split("");
             intMap[i]= new int[line.length];
             for (int j = 0; j < line.length; j++){
                 intMap[i][j] = Integer.parseInt(line[j]);
+                objMap[i][j] = new HashSet<Actor>(); 
             }
         }
     }
@@ -59,6 +61,13 @@ public class Map {
             }
         }
         return true;
+    }
+    public boolean Effect(int effect,Actor entity){//
+        float x = entity.getX();
+        float y = entity.getY();
+        float w = entity.getWidth();
+        float h = entity.getHeight();
+        return Effect(effect,x,y,w,h);
     }
     public Set<Actor> GetEnts(int x, int y){//return a set of all entities in that tile
         if (InBounds(x,y)){
