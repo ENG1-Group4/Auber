@@ -19,7 +19,7 @@ public class Map {
         }
     }
     public Map(String strMap){
-        String lines[] = strMap.split("\n");
+        String lines[] = strMap.split("\\r?\\n");
         intMap = new int[lines.length][];
         objMap = new HashSet[intMap.length][intMap[0].length];
         for (int i = 0; i < lines.length; i++) {
