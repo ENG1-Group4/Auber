@@ -16,8 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Player extends Actor {
     private Texture image = new Texture(Gdx.files.internal("img/player.png"));
     private float playerSpeed = 5;
+    private Map map;
 
-    public Player(){
+    public Player(Map map){
+        this.map = map;
         setPosition(50, 50);
     }
 
@@ -25,17 +27,25 @@ public class Player extends Actor {
     public void draw(Batch batch, float parentAlpha) {
 
         //Move the player by a set amount if the keys are pressed.
+        float deltaX = 0;
+        float deltaY = 0;
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            moveBy(0,playerSpeed);
+            deltaY += playerSpeed;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            moveBy(0,-playerSpeed);
+            deltaY -= playerSpeed;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            moveBy(-playerSpeed,0);
+            deltaX -= playerSpeed;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            moveBy(playerSpeed,0);
+            deltaX += playerSpeed;
+        }
+        if (map.Empty(getX() + deltaX, getY(), image.getHeight(), image.getHeight())){
+            moveBy(deltaX, 0);
+        }
+        if (map.Empty(getX(), getY() + deltaY, image.getHeight(), image.getHeight())){
+            moveBy(0, deltaY);
         }
 
         //Draw the image

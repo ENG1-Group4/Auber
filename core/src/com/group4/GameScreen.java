@@ -32,7 +32,7 @@ public class GameScreen extends ScreenAdapter {
         map = new Map(Gdx.files.internal("map").readString());
 
         //Create the player and add it to the stage
-        player = new Player();
+        player = new Player(map);
         stage.addActor(player);
 
     }
