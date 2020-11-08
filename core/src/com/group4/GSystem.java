@@ -24,6 +24,7 @@ public class GSystem extends Actor {
             health -= amount;
             if (health <= 0) {
                 onDeath();
+                //by.inform of death?, so operative can choose new target?, could return a bool that it was destroyed?
             } else {
                 //inform game that system has been hit
                 //e.g. minimap.sysDamaged(room,health);
