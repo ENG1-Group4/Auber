@@ -17,6 +17,8 @@ public class Player extends Actor {
     private Texture image = new Texture(Gdx.files.internal("img/player.png"));
     private float playerSpeed = 5;
     private Map map;
+    private int health = 100;
+    private float healthTimer = 0;
 
     public Player(Map map){
         this.map = map;
@@ -48,6 +50,15 @@ public class Player extends Actor {
         }
         if (map.Empty(getX(), getY() + deltaY, image.getHeight(), image.getHeight())){
             moveBy(0, deltaY);
+        }
+
+        //Player Health
+        if (map.Effect(2,this)){
+            healthTimer += Gdx.graphics.getDeltaTime();
+            if(healthTimer >= 0.1f && health > 100) {
+                health ++;
+                healthTimer = 0f;
+            }
         }
 
         //Draw the image
