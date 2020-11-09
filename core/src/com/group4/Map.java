@@ -1,4 +1,5 @@
 package com.group4;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,6 +22,14 @@ public class Map {
     public Map(String strMap){
         String lines[] = strMap.split("\\r?\\n");
         intMap = new int[lines.length][];
+        for (int i = 0; i < lines.length; i++) {
+            String line[] = lines[i].split("");
+            intMap[i] = new int[line.length];
+            for (int j = 0; j < line.length; j++) {
+                intMap[i][j] = Integer.parseInt(line[j]);
+            }
+        }
+
         objMap = new HashSet[intMap.length][intMap[0].length];
         for (int i = 0; i < lines.length; i++) {
             String line[] = lines[i].split("");
