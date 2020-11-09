@@ -21,13 +21,15 @@ public class Map {
     public Map(String strMap){
         String lines[] = strMap.split("\\r?\\n");
         intMap = new int[lines.length][];
-        objMap = new HashSet[intMap.length][intMap[0].length];
+        objMap = new HashSet[lines.length][];
         for (int i = 0; i < lines.length; i++) {
             String line[] = lines[i].split("");
             intMap[i]= new int[line.length];
+            objMap[i] = new HashSet[line.length];
+
             for (int j = 0; j < line.length; j++){
                 intMap[i][j] = Integer.parseInt(line[j]);
-                objMap[i][j] = new HashSet<Actor>(); 
+                objMap[i][j] = new HashSet<Actor>();
             }
         }
     }
