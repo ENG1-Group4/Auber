@@ -1,18 +1,19 @@
 package com.group4;
+import java.util.HashSet;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.group4.Map;
 
 public class GSystem extends Actor {
-    int health;
+    public int health;
     int room;
     Map map;
-    static int systemsRemaining = 0;
+    public static HashSet<GSystem> systemsRemaining = new HashSet<GSystem>();
 
     public GSystem(int x, int y, int w, int h, Map map, int room, int health){
         this.map = map;
         this.room = room;
         this.health = health;
-        systemsRemaining += 1;
+        systemsRemaining.add(this);
         setBounds((float) x*32,(float) y*32,(float) w*31,(float) h*31);
         map.autoEnter(this);
     }
@@ -33,10 +34,10 @@ public class GSystem extends Actor {
     }
     public void onDeath(){
         map.autoLeave(this);
-        systemsRemaining -= 1;
+        systemsRemaining.remove(this);
         //inform player that system has been destroyed
         //e.g. minimap.sysDestroyed(room);
-        if (systemsRemaining == 0){
+        if (systemsRemaining.size() == 0){
             //gameover man
         }
     }
