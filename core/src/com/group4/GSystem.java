@@ -1,5 +1,5 @@
 package com.group4;
-import java.util.HashSet;
+import java.util.ArrayList;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.group4.Map;
 
@@ -7,7 +7,7 @@ public class GSystem extends Actor {
     public int health;
     int room;
     Map map;
-    public static HashSet<GSystem> systemsRemaining = new HashSet<GSystem>();
+    public static ArrayList<GSystem> systemsRemaining = new ArrayList<GSystem>();
 
     public GSystem(int x, int y, int w, int h, Map map, int room, int health){
         this.map = map;
