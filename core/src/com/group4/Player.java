@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import java.lang.Math;
 
 /**
  * The player sprite. Extends the {@link com.badlogic.gdx.scenes.scene2d.Actor} class.
@@ -14,8 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * @author Robert Watts
  */
 public class Player extends Actor {
-    private Texture image = new Texture(Gdx.files.internal("img/player.png"));
-    private float playerSpeed = 5;
+    private final Texture imageDown = new Texture(Gdx.files.internal("img/player.png"));
+    private final Texture imageUp = new Texture(Gdx.files.internal("img/player_up.png"));
+    private final Texture imageLeft = new Texture(Gdx.files.internal("img/player_left.png"));
+    private final Texture imageRight = new Texture(Gdx.files.internal("img/player_right.png"));
+    private Texture currentImage = imageDown;
+
+    private float playerSpeed = 5f;
     private Map map;
     private int health = 100;
     private float healthTimer = 0;
@@ -45,24 +51,45 @@ public class Player extends Actor {
         }
 
         //Check the space is empty before moving into it
-        if (map.Empty(getX() + deltaX, getY(), image.getHeight(), image.getHeight())){
+        if (map.Empty(getX() + deltaX, getY(), currentImage.getWidth(), currentImage.getHeight())){
             moveBy(deltaX, 0);
+
         }
-        if (map.Empty(getX(), getY() + deltaY, image.getHeight(), image.getHeight())){
+        if (map.Empty(getX(), getY() + deltaY, currentImage.getWidth(), currentImage.getHeight())){
             moveBy(0, deltaY);
         }
 
-        //Player Health
-        if (map.Effect(2,this)){
-            healthTimer += Gdx.graphics.getDeltaTime();
-            if(healthTimer >= 0.1f && health > 100) {
-                health ++;
-                healthTimer = 0f;
+        //See if the player has moved
+        if (Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0){
+
+            //Player Health
+            if (map.Effect(2,this)){
+                healthTimer += Gdx.graphics.getDeltaTime();
+                if(healthTimer >= 0.1f && health > 100) {
+                    health ++;
+                    healthTimer = 0f;
+                }
             }
+
+            //Change the image
+            if (Math.abs(deltaX) >= Math.abs(deltaY)) {
+                if(deltaX > 0){
+                    currentImage = imageRight;
+                } else {
+                    currentImage = imageLeft;
+                }
+            } else {
+                if(deltaY > 0){
+                    currentImage = imageUp;
+                } else {
+                    currentImage = imageDown;
+                }
+            }
+
         }
 
         //Draw the image
-        batch.draw(image, getX(), getY(), image.getWidth(), image.getHeight());
+        batch.draw(currentImage, getX(), getY(), currentImage.getWidth(), currentImage.getHeight());
     }
 
 
