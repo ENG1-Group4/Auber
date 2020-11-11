@@ -1,50 +1,69 @@
 package com.group4;
-import java.util.Set;
-import java.util.HashSet;
+
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-public class Map {
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Map extends OrthogonalTiledMapRenderer {
+
     public int[][] intMap;
     public Set<Actor>[][] objMap;
     final int WALL = 1;
     final int EMPTY = 0;
     final int HEAL = 2;
+    MapProperties properties;
 
-    public Map(int[][] intMap){
-        this.intMap = intMap;
-        objMap = new HashSet[intMap.length][intMap[0].length];
-        for (int i = 0; i < intMap.length; i++) {
-            for (int j = 0; j < intMap[0].length; j++){
-                objMap[i][j] = new HashSet<Actor>(); 
-            }
-        }
-    }
-    public Map(String strMap){
+    public Map(TiledMap map, String strMap) {
+        super(map);
+        properties = map.getProperties();
+
         String lines[] = strMap.split("\\r?\\n");
-        intMap = new int[lines.length][];
-        objMap = new HashSet[lines.length][];
-        for (int i = 0; i < lines.length; i++) {
-            String line[] = lines[i].split("");
-            intMap[i]= new int[line.length];
-            objMap[i] = new HashSet[line.length];
+        Collections.reverse(Arrays.asList(lines));
 
-            for (int j = 0; j < line.length; j++){
-                intMap[i][j] = Integer.parseInt(line[j]);
+        intMap = new int[lines[0].length()][];
+        objMap = new HashSet[lines[0].length()][];
+
+        for (int i = 0; i < lines[0].length(); i++) {
+            intMap[i]= new int[lines.length];
+            objMap[i] = new HashSet[lines.length];
+
+            for (int j = 0; j < lines.length ; j++) {
+                intMap[i][j] = Integer.parseInt(String.valueOf(lines[j].charAt(i)));
                 objMap[i][j] = new HashSet<Actor>();
             }
         }
+
     }
-    // public Map(String strMap){//create a map from a string (for file storage etc.)
-    //     pass
-    // }
-    public boolean Empty(int x, int y){//is the tile empty
+
+    /**
+     * Determines whether a map tile empty and whether can this be walked into
+     * @param x
+     * @param y
+     * @return boolean
+     */
+    public boolean Empty(int x, int y){
         if (InBounds(x,y)){
             return intMap[x][y] != WALL;
         } else{
             return false;
         }
-        
     }
-    public boolean Empty(float x, float y, float w, float h){//are all tiles containing this area empty (can this be walked into)
+
+    /**
+     * Determines whether a map tile empty and whether can this be walked into
+     * @param x the x coordinate of rectangle
+     * @param y the x coordinate of rectangle
+     * @param w width of rectangle
+     * @param h height of rectangle
+     * @return
+     */
+    public boolean Empty(float x, float y, float w, float h){
+
         for (int i = gridPos(x); i <= gridPos(x + w); i++) {
             for (int j = gridPos(y); j <= gridPos(y + h); j++) {
                 if (!Empty(i,j)){
@@ -54,6 +73,17 @@ public class Map {
         }
         return true;
     }
+
+    /**
+     * return true if every tile they are in is a effect tile
+     *
+     * @param effect the effect you are looking for
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return boolean if the effect is
+     */
     public boolean Effect(int effect,float x, float y, float w, float h){//
         for (int i = gridPos(x); i <= gridPos(x + w); i++) {
             for (int j = gridPos(y); j <= gridPos(y + h); j++) {
@@ -64,6 +94,14 @@ public class Map {
         }
         return true;
     }
+
+    /**
+     * return true if every tile they are in is a effect tile
+     *
+     * @param effect
+     * @param entity
+     * @return
+     */
     public boolean Effect(int effect,Actor entity){//
         float x = entity.getX();
         float y = entity.getY();
@@ -71,15 +109,33 @@ public class Map {
         float h = entity.getHeight();
         return Effect(effect,x,y,w,h);
     }
-    public Set<Actor> GetEnts(int x, int y){//return a set of all entities in that tile
+
+    /**
+     * return a set of all entities in that tile
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public Set<Actor> GetEnts(int x, int y){
         if (InBounds(x,y)){
             return objMap[x][y];
         } else{
             return new HashSet<Actor>();
         }
-        
+
     }
-    public Set<Actor> GetEnts(float x, float y, float w, float h){//return a set of all entities in tiles overlapping that area
+
+    /**
+     * return a set of all entities in tiles overlapping that area
+     *
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
+    public Set<Actor> GetEnts(float x, float y, float w, float h){
         Set<Actor> ents = new HashSet<Actor>();
         for (int i = gridPos(x); i <= gridPos(x + w); i++) {
             for (int j = gridPos(y); j <= gridPos(y + h); j++) {
@@ -90,10 +146,31 @@ public class Map {
         }
         return ents;
     }
-    public Set<Actor> InArea(float x, float y, float w, float h){//return a set of entities in the given area
+
+    /**
+     * return a set of entities in the given area
+     *
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
+    public Set<Actor> InArea(float x, float y, float w, float h){
         return InArea(GetEnts(x,y,w,h),x,y,w,h);
     }
-    public Set<Actor> InArea(Set<Actor> entities, float x, float y, float w, float h){//return a set of entities in the given area from the given set
+
+    /**
+     * return a set of entities in the given area from the given set
+     *
+     * @param entities
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
+    public Set<Actor> InArea(Set<Actor> entities, float x, float y, float w, float h){
         Set<Actor> ents = new HashSet<Actor>();
         for (Actor ent : entities) {
             float x2 = ent.getX();
@@ -106,23 +183,68 @@ public class Map {
         }
         return ents;
     }
-    public Set<Actor> Touching(Actor entity){//return a set of all entities the given entity is touching
+
+    /**
+     * return a set of all entities the given entity is touching
+     *
+     * @param entity
+     * @return
+     */
+    public Set<Actor> Touching(Actor entity){
         float x = entity.getX();
         float y = entity.getY();
         float w = entity.getWidth();
         float h = entity.getHeight();
         return InArea(x,y,w,h);
     }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param entity
+     */
     public void Enter(int x, int y,Actor entity){
         objMap[x][y].add(entity);
     }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param entity
+     */
     public void Leave(int x, int y,Actor entity){
         objMap[x][y].remove(entity);
     }
-    public int gridPos(float pixelPos){//converts position in pixels to position in grid
-        return (int) pixelPos/32;//(pixelPos - pixelPos%32)/32;
+
+
+    /**
+     * converts position in pixels to position in grid
+     *
+     * @param pixelPos the pixel coordinate
+     * @return An integer of the grid position
+     */
+    public int gridPos(float pixelPos){
+        return (int) pixelPos/properties.get("tilewidth", Integer.class);
     }
-    public void autoLeave(Actor entity){//Leave all required tiles for this entity
+
+    /**
+     * Converts a grid position into a world position
+     *
+     * @param gridPos
+     * @return
+     */
+    public int worldPos(int gridPos){
+        return gridPos*properties.get("tilewidth", Integer.class);
+    }
+
+    /**
+     * Leave all required tiles for this entity
+     *
+     * @param entity
+     */
+    public void autoLeave(Actor entity){
         float x = entity.getX();
         float y = entity.getY();
         float w = entity.getWidth();
@@ -132,7 +254,13 @@ public class Map {
         Leave(gridPos(x + w),gridPos(y),entity);
         Leave(gridPos(x + w),gridPos(y + h),entity);
     }
-    public void autoEnter(Actor entity){//enter all required tiles for this entity
+
+    /**
+     * enter all required tiles for this entity
+     *
+     * @param entity
+     */
+    public void autoEnter(Actor entity){//
         float x = entity.getX();
         float y = entity.getY();
         float w = entity.getWidth();
@@ -142,11 +270,18 @@ public class Map {
         Enter(gridPos(x + w),gridPos(y),entity);
         Enter(gridPos(x + w),gridPos(y + h),entity);
     }
+
+    /**
+     * Works out if a coordinate is within the map
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @return True if it is, False if its not
+     */
     private boolean InBounds(int x, int y){
         return 0 <= x && x < intMap.length && 0 <= y && y < intMap[0].length;
     }
-    public static void main (String[] arg) {
-        int[][] mapRepr = {{1,1,1},{1,0,1},{1,0,1},{1,1,1}};
-        Map x = new Map(mapRepr);
-	}
+
+
+
 }

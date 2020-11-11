@@ -20,9 +20,9 @@ public class Player extends Actor {
     private int health = 100;
     private float healthTimer = 0;
 
-    public Player(Map map){
-        this.map = map;
-        setPosition(50, 50);
+    public Player(Map map4){
+        this.map = map4;
+        setPosition(map.worldPos(13), map.worldPos(6));
     }
 
     @Override
