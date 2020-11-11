@@ -9,20 +9,36 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The map render. Extended {@link com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer} and then added functionality to detect whether walls,
+ * and healing etc
+ *
+ * @author Adam Wiegrand
+ * @author Robert Watts
+ */
 public class Map extends OrthogonalTiledMapRenderer {
 
     public int[][] intMap;
-    public Set<Actor>[][] objMap;
+    public HashSet[][] objMap;
+    MapProperties properties;
+
+    //Each one of these is used in the string representation of the map for collision detection
     final int WALL = 1;
     final int EMPTY = 0;
     final int HEAL = 2;
-    MapProperties properties;
 
+    /**
+     * Create the map render and convert the string representation for use in collision detection.
+     *
+     * @param map A titled map object that contains the visual representation of the map
+     * @param strMap A string representation of of the map (from a file), using numbers. Each tile is a number
+     *               with what each number means being set above
+     */
     public Map(TiledMap map, String strMap) {
         super(map);
         properties = map.getProperties();
 
-        String lines[] = strMap.split("\\r?\\n");
+        String[] lines = strMap.split("\\r?\\n");
         Collections.reverse(Arrays.asList(lines));
 
         intMap = new int[lines[0].length()][];
@@ -42,8 +58,8 @@ public class Map extends OrthogonalTiledMapRenderer {
 
     /**
      * Determines whether a map tile empty and whether can this be walked into
-     * @param x
-     * @param y
+     * @param x The x cordinate relative to the map
+     * @param y The y cordinate relative to the map
      * @return boolean
      */
     public boolean Empty(int x, int y){
@@ -56,11 +72,11 @@ public class Map extends OrthogonalTiledMapRenderer {
 
     /**
      * Determines whether a map tile empty and whether can this be walked into
-     * @param x the x coordinate of rectangle
-     * @param y the x coordinate of rectangle
+     * @param x the x coordinate of rectangle relative to the world
+     * @param y the x coordinate of rectangle relative to the world
      * @param w width of rectangle
      * @param h height of rectangle
-     * @return
+     * @return boolean if the square can be walked into
      */
     public boolean Empty(float x, float y, float w, float h){
 
@@ -75,14 +91,14 @@ public class Map extends OrthogonalTiledMapRenderer {
     }
 
     /**
-     * return true if every tile they are in is a effect tile
+     * return true if every tile the cordinates rectangle are in is a effect tile
      *
-     * @param effect the effect you are looking for
-     * @param x
-     * @param y
-     * @param w
-     * @param h
-     * @return boolean if the effect is
+     * @param effect the effect you are looking for e.g 2 for heal. (set in class variables)
+     * @param x the x coordinate of rectangle relative to the world
+     * @param y the x coordinate of rectangle relative to the world
+     * @param w width of rectangle
+     * @param h height of rectangle
+     * @return boolean if the rectangle is in a effect square
      */
     public boolean Effect(int effect,float x, float y, float w, float h){//
         for (int i = gridPos(x); i <= gridPos(x + w); i++) {
@@ -96,26 +112,26 @@ public class Map extends OrthogonalTiledMapRenderer {
     }
 
     /**
-     * return true if every tile they are in is a effect tile
+     * return true if every tile an actor are in is a effect tile
      *
-     * @param effect
-     * @param entity
-     * @return
+     * @param effect the effect you are looking for e.g 2 for heal. (set in class variables)
+     * @param actor An actor to test
+     * @return boolean if the actor is in a effect square
      */
-    public boolean Effect(int effect,Actor entity){//
-        float x = entity.getX();
-        float y = entity.getY();
-        float w = entity.getWidth();
-        float h = entity.getHeight();
+    public boolean Effect(int effect,Actor actor){//
+        float x = actor.getX();
+        float y = actor.getY();
+        float w = actor.getWidth();
+        float h = actor.getHeight();
         return Effect(effect,x,y,w,h);
     }
 
     /**
-     * return a set of all entities in that tile
+     * return a set of all entities in that tile overlapping that area
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x the x coordinate relative to the map
+     * @param y the y coordinate relative to the map
+     * @return returns a hash set of all the actors at the coordinates
      */
     public Set<Actor> GetEnts(int x, int y){
         if (InBounds(x,y)){
@@ -129,11 +145,11 @@ public class Map extends OrthogonalTiledMapRenderer {
     /**
      * return a set of all entities in tiles overlapping that area
      *
-     * @param x
-     * @param y
-     * @param w
-     * @param h
-     * @return
+     * @param x the x coordinate of rectangle relative to the map
+     * @param y the x coordinate of rectangle relative to the map
+     * @param w width of rectangle
+     * @param h height of rectangle
+     * @return returns a hash set of all the actors at the coordinates
      */
     public Set<Actor> GetEnts(float x, float y, float w, float h){
         Set<Actor> ents = new HashSet<Actor>();
@@ -150,11 +166,11 @@ public class Map extends OrthogonalTiledMapRenderer {
     /**
      * return a set of entities in the given area
      *
-     * @param x
-     * @param y
-     * @param w
-     * @param h
-     * @return
+     * @param x the x coordinate of rectangle relative to the map
+     * @param y the x coordinate of rectangle relative to the map
+     * @param w width of rectangle
+     * @param h height of rectangle
+     * @return returns a set of entities in the given area
      */
     public Set<Actor> InArea(float x, float y, float w, float h){
         return InArea(GetEnts(x,y,w,h),x,y,w,h);
@@ -163,12 +179,12 @@ public class Map extends OrthogonalTiledMapRenderer {
     /**
      * return a set of entities in the given area from the given set
      *
-     * @param entities
-     * @param x
-     * @param y
-     * @param w
-     * @param h
-     * @return
+     * @param entities A set of actors
+     * @param x the x coordinate of rectangle relative to the map
+     * @param y the x coordinate of rectangle relative to the map
+     * @param w width of rectangle
+     * @param h height of rectangle
+     * @return returns a set of entities in the given area from the given set
      */
     public Set<Actor> InArea(Set<Actor> entities, float x, float y, float w, float h){
         Set<Actor> ents = new HashSet<Actor>();
@@ -187,8 +203,8 @@ public class Map extends OrthogonalTiledMapRenderer {
     /**
      * return a set of all entities the given entity is touching
      *
-     * @param entity
-     * @return
+     * @param entity the actor to check
+     * @return a set of all actors
      */
     public Set<Actor> Touching(Actor entity){
         float x = entity.getX();
@@ -199,50 +215,52 @@ public class Map extends OrthogonalTiledMapRenderer {
     }
 
     /**
+     *  Move the player into a tile at coordinates (x,y)
      *
-     * @param x
-     * @param y
-     * @param entity
+     * @param x The x coordinate of the actor relative to the map
+     * @param y The y coordinate of the actor relative to the map
+     * @param actor The actor to move into the tile
      */
-    public void Enter(int x, int y,Actor entity){
-        objMap[x][y].add(entity);
+    public void Enter(int x, int y,Actor actor){
+        objMap[x][y].add(actor);
     }
 
     /**
+     *  Move the player out of a tile at cordinates (x,y)
      *
-     * @param x
-     * @param y
-     * @param entity
+     * @param x The x coordinate of the actor relative to the map
+     * @param y The y coordinate of the actor relative to the map
+     * @param actor The actor to move into the tile
      */
-    public void Leave(int x, int y,Actor entity){
-        objMap[x][y].remove(entity);
+    public void Leave(int x, int y,Actor actor){
+        objMap[x][y].remove(actor);
     }
 
 
     /**
      * converts position in pixels to position in grid
      *
-     * @param pixelPos the pixel coordinate
-     * @return An integer of the grid position
+     * @param worldPos the coordinate relative to the world
+     * @return An integer of the grid coordinate relative to the map
      */
-    public int gridPos(float pixelPos){
-        return (int) pixelPos/properties.get("tilewidth", Integer.class);
+    public int gridPos(float worldPos){
+        return (int) worldPos /properties.get("tilewidth", Integer.class);
     }
 
     /**
-     * Converts a grid position into a world position
+     * Converts a world position into a grid position
      *
-     * @param gridPos
-     * @return
+     * @param gridPos the coordinate relative to the map
+     * @return An integer of the grid coordinate relative to the world
      */
     public int worldPos(int gridPos){
         return gridPos*properties.get("tilewidth", Integer.class);
     }
 
     /**
-     * Leave all required tiles for this entity
+     * Leave all required tiles for this actor
      *
-     * @param entity
+     * @param entity The actor
      */
     public void autoLeave(Actor entity){
         float x = entity.getX();
@@ -256,9 +274,9 @@ public class Map extends OrthogonalTiledMapRenderer {
     }
 
     /**
-     * enter all required tiles for this entity
+     * enter all required tiles for this actor
      *
-     * @param entity
+     * @param entity The actor
      */
     public void autoEnter(Actor entity){//
         float x = entity.getX();

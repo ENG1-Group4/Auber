@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
  * The player sprite. Extends the {@link com.badlogic.gdx.scenes.scene2d.Actor} class.
- * Handel's key presses for play moment, as wll as drawing the player each frame.
+ * Handles key presses for play moment, as wll as drawing the player each frame.
  * The key press are polled rather than using events so that the player can move diagonally.
  *
  * @author Robert Watts

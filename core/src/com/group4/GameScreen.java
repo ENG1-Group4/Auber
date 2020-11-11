@@ -22,27 +22,27 @@ public class GameScreen extends ScreenAdapter {
     private Player player;
     private Map map;
     private OrthographicCamera camera;
-
+    private final float CameraLerp =1f;
     public GameScreen (AuberGame game){
         this.game = game;
     }
 
     @Override
     public void show() {
-        //Create the stage and allow it to process inputs. Using an Extend Viewport for scalability of the product
 
 
-        //Load the map
+        //Create the camera
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
 
+        //Create the stage and allow it to process inputs. Using an Extend Viewport for scalability of the product
         stage = new Stage(new ExtendViewport(w,h,camera));
         Gdx.input.setInputProcessor(stage);
 
-
+        //Load the map and create it
         TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
         map = new Map(tiledMap, Gdx.files.internal("map").readString());
 
@@ -58,15 +58,14 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
 
-
-
-
-        float lerp =1f;
+        //Move the camera to follow the player
         Vector3 position = camera.position;
-        camera.position.x += (player.getX() + delta - camera.position.x) * lerp * delta;
-        camera.position.y += (player.getY() + delta - camera.position.y) * lerp * delta;
+        camera.position.x += (player.getX() + delta - camera.position.x) * CameraLerp * delta;
+        camera.position.y += (player.getY() + delta - camera.position.y) * CameraLerp * delta;
         camera.update();
         map.setView(camera);
+
+        //Render the objects
         map.render();
         stage.draw();
     }
