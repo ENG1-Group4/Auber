@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
@@ -65,9 +66,11 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
         map.setView(camera);
 
-        //Render the objects
-        map.render();
+        //Render the objects. Rander the bg layers, then the player, then the foreground layers to give the effect of
+        //3d (as the player can go behind certain objects)
+        map.render(new int[]{0,1,2,3,4,5});
         stage.draw();
+        map.render(new int[]{6,7});
     }
 
 
