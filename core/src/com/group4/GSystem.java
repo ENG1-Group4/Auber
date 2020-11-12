@@ -8,12 +8,16 @@ public class GSystem extends Actor {
     public int health;
     int room;
     Map map;
+    public int x;
+    public int y;
     public static ArrayList<GSystem> systemsRemaining = new ArrayList<GSystem>();
 
     public GSystem(int x, int y, int w, int h, Map map, int room, int health) {
         this.map = map;
         this.room = room;
         this.health = health;
+        this.x = x;
+        this.y = y;
         systemsRemaining.add(this);
         setBounds((float) x * 32, (float) y * 32, (float) w * 31, (float) h * 31);
         map.autoEnter(this);
@@ -25,8 +29,8 @@ public class GSystem extends Actor {
 
     public void onHit(Object by, int amount) {
         if /* (by instanceof Operative) */ (true) {
-            health -= amount;
-            if (health <= 0) {
+            this.health -= amount;
+            if (this.health <= 0) {
                 onDeath();
                 // by.inform of death?, so operative can choose new target?, could return a bool
                 // that it was destroyed?
