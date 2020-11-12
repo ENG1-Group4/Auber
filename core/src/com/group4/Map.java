@@ -267,12 +267,23 @@ public class Map extends OrthogonalTiledMapRenderer {
         float y = entity.getY();
         float w = entity.getWidth();
         float h = entity.getHeight();
+        autoLeave(entity,x,y,w,h);
+    }
+    /**
+     *leave all required tiles for the given area
+     *
+     * @param entity The actor
+     * @param x the x coordinate of rectangle relative to the map
+     * @param y the x coordinate of rectangle relative to the map
+     * @param w width of rectangle
+     * @param h height of rectangle
+     */
+    public void autoLeave(Actor entity,float x, float y, float w, float h){//
         Leave(gridPos(x),gridPos(y),entity);
         Leave(gridPos(x),gridPos(y + h),entity);
         Leave(gridPos(x + w),gridPos(y),entity);
         Leave(gridPos(x + w),gridPos(y + h),entity);
     }
-
     /**
      * enter all required tiles for this actor
      *
@@ -283,6 +294,18 @@ public class Map extends OrthogonalTiledMapRenderer {
         float y = entity.getY();
         float w = entity.getWidth();
         float h = entity.getHeight();
+        autoEnter(entity,x,y,w,h);
+    }
+    /**
+     *enter all required tiles for the given area
+     *
+     * @param entity The actor
+     * @param x the x coordinate of rectangle relative to the map
+     * @param y the x coordinate of rectangle relative to the map
+     * @param w width of rectangle
+     * @param h height of rectangle
+     */
+    public void autoEnter(Actor entity,float x, float y, float w, float h){//
         Enter(gridPos(x),gridPos(y),entity);
         Enter(gridPos(x),gridPos(y + h),entity);
         Enter(gridPos(x + w),gridPos(y),entity);
