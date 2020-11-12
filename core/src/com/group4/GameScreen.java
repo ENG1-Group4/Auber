@@ -58,7 +58,6 @@ public class GameScreen extends ScreenAdapter {
 
         // Create sytems
         GSystem.systemsRemaining.add(new GSystem(13, 20, map, 0, 100));
-        // GSystem.systemsRemaining.add(new GSystem(13, 15, map, 0, 100));
 
         // Create operatives
         operatives.add(new Operative(map));

@@ -12,6 +12,7 @@ public class Operative extends Actor {
   private int health = 100;
   private GSystem target;
   private boolean isHacking = false;
+  private boolean arrested = false;
 
   public Operative(Map map) {
     this.map = map;
@@ -29,13 +30,15 @@ public class Operative extends Actor {
   @Override
   public void draw(Batch batch, float parentAlpha) {
 
+    if (this.arrested)
+      return;
+
     if (!this.isHacking && getX() == this.target.x && getY() == this.target.y) {
       this.hackSystem();
     }
 
     // TODO Implement A* search to find a path to the system.
 
-    /*
     float deltaX = 0;
     float deltaY = 0;
 
@@ -46,7 +49,6 @@ public class Operative extends Actor {
     if (map.Empty(getX(), getY() + deltaY, image.getHeight(), image.getHeight())) {
       moveBy(0, deltaY);
     }
-    */
 
     // Draw the image
     batch.draw(image, getX(), getY(), image.getWidth(), image.getHeight());
@@ -58,6 +60,12 @@ public class Operative extends Actor {
     while (this.target.health > 0) {
       this.target.onHit(this, 5);
     }
+    this.isHacking = false;
     this.target = GSystem.systemsRemaining.get((int) Math.round(Math.random() * (GSystem.systemsRemaining.size() - 1)));
+  }
+
+  public void handleArrest() {
+    this.isHacking = false;
+    this.arrested = true;
   }
 }
