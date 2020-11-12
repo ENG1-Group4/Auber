@@ -2,6 +2,8 @@ package com.group4;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,15 +22,18 @@ public class Player extends Actor {
     private final Texture imageLeft = new Texture(Gdx.files.internal("img/player_left.png"));
     private final Texture imageRight = new Texture(Gdx.files.internal("img/player_right.png"));
     private Texture currentImage = imageDown;
+    private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
 
-    private float playerSpeed = 5f;
+    private float playerSpeed = 2.5f;
     private Map map;
     private int health = 100;
     private float healthTimer = 0;
+    private long audioStart = 0;
+
 
     public Player(Map map4){
         this.map = map4;
-        setPosition(map.worldPos(13), map.worldPos(6));
+        setPosition(map.worldPos(39), map.worldPos(40));
     }
 
     @Override
@@ -53,7 +58,6 @@ public class Player extends Actor {
         //Check the space is empty before moving into it
         if (map.Empty(getX() + deltaX, getY(), currentImage.getWidth(), currentImage.getHeight())){
             moveBy(deltaX, 0);
-
         }
         if (map.Empty(getX(), getY() + deltaY, currentImage.getWidth(), currentImage.getHeight())){
             moveBy(0, deltaY);
@@ -61,6 +65,12 @@ public class Player extends Actor {
 
         //See if the player has moved
         if (Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0){
+            
+            //Sets the footstep sound effect to play at 0.32 sec intervals when the player is moving
+            if (TimeUtils.timeSinceNanos(audioStart) > 320000000) {
+                step.play(0.3f);
+                audioStart = TimeUtils.nanoTime();
+            }
 
             //Player Health
             if (map.Effect(2,this)){
