@@ -62,15 +62,6 @@ public class Player extends Actor {
         //See if the player has moved
         if (Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0){
 
-            //Player Health
-            if (map.Effect(2,this)){
-                healthTimer += Gdx.graphics.getDeltaTime();
-                if(healthTimer >= 0.1f && health > 100) {
-                    health ++;
-                    healthTimer = 0f;
-                }
-            }
-
             //Change the image
             if (Math.abs(deltaX) >= Math.abs(deltaY)) {
                 if(deltaX > 0){
@@ -88,9 +79,22 @@ public class Player extends Actor {
 
         }
 
+        //Player Health
+        if (map.Effect(2,this)){
+            healthTimer += Gdx.graphics.getDeltaTime();
+            if(healthTimer >= 0.1f && health < 100) {
+                health += 1;
+                healthTimer = 0f;
+            }
+            System.out.println(health);
+        }
+
+
         //Draw the image
         batch.draw(currentImage, getX(), getY(), currentImage.getWidth(), currentImage.getHeight());
     }
 
-
+    public int getHealth(){
+        return health;
+    }
 }

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
@@ -24,14 +23,13 @@ public class GameScreen extends ScreenAdapter {
     private Map map;
     private OrthographicCamera camera;
     private final float CameraLerp =1f;
+    private HUD HUD;
     public GameScreen (AuberGame game){
         this.game = game;
     }
 
     @Override
     public void show() {
-
-
         //Create the camera
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -51,6 +49,8 @@ public class GameScreen extends ScreenAdapter {
         player = new Player(map);
         stage.addActor(player);
 
+        //Create the Heads up display
+        HUD = new HUD(player, tiledMap);
     }
 
     @Override
@@ -71,6 +71,9 @@ public class GameScreen extends ScreenAdapter {
         map.render(new int[]{0,1,2,3,4,5});
         stage.draw();
         map.render(new int[]{6,7});
+
+        //Draw the HUD
+        HUD.draw();
     }
 
 
