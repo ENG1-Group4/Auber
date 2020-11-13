@@ -29,6 +29,7 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen (AuberGame game){
         this.game = game;
         ambience.play();
+        ambience.setLooping(true);
         ambience.setVolume(0.6f);
     }
     
