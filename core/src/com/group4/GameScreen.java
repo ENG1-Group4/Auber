@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.audio.Music;
 
 /**
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
@@ -24,10 +25,13 @@ public class GameScreen extends ScreenAdapter {
     private Map map;
     private OrthographicCamera camera;
     private final float CameraLerp =1f;
+    private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.ogg"));
     public GameScreen (AuberGame game){
         this.game = game;
+        ambience.play();
+        ambience.setVolume(0.6f);
     }
-
+    
     @Override
     public void show() {
 
@@ -50,7 +54,6 @@ public class GameScreen extends ScreenAdapter {
         //Create the player and add it to the stage
         player = new Player(map);
         stage.addActor(player);
-
     }
 
     @Override
