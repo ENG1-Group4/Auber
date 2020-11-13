@@ -21,7 +21,7 @@ public class Player extends Actor {
     private final Texture imageRight = new Texture(Gdx.files.internal("img/player_right.png"));
     private Texture currentImage = imageDown;
 
-    private float playerSpeed = 1f;
+    private float playerSpeed = 2f;
     private Map map;
     private int health = 100;
     private float healthTimer = 0;

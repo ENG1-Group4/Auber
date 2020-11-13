@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -23,7 +26,9 @@ public class GameScreen extends ScreenAdapter {
     private Player player;
     private Map map;
     private OrthographicCamera camera;
-    private final float CameraLerp =1f;
+    private final float CameraLerp = 2f;
+    private SpriteBatch batch;
+    private TextureRegion backgroundTexture;
     public GameScreen (AuberGame game){
         this.game = game;
     }
@@ -68,6 +73,7 @@ public class GameScreen extends ScreenAdapter {
 
         //Render the objects. Rander the bg layers, then the player, then the foreground layers to give the effect of
         //3d (as the player can go behind certain objects)
+        //backgroundTexture = new TextureRegion(new Texture("spaceBackground.jpg"), 0, 0, 1920, 1080);
         map.render(new int[]{0,1,2,3,4,5});
         stage.draw();
         map.render(new int[]{6,7});

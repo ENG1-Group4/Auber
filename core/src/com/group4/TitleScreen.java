@@ -4,13 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -23,6 +26,8 @@ public class TitleScreen extends ScreenAdapter {
 
     public AuberGame game;
     private Stage stage;
+    private SpriteBatch batch;
+    private TextureRegion backgroundTexture;
 
     public TitleScreen (AuberGame game){
         this.game = game;
@@ -38,17 +43,22 @@ public class TitleScreen extends ScreenAdapter {
         Table table = new Table();
         table.setFillParent(true);
 
-
         //Create the logo and add it to the table
         Texture logoTexture = new Texture(Gdx.files.internal("img/logo.png"));
         Image logo = new Image(logoTexture);
         table.add(logo).pad(10).fillY().align(Align.center);
         table.row();
 
+
         //Create the start game button, add it to the table and it click event
-        Button startButton = new TextButton("Start Game", game.skin);
-        table.add(startButton).pad(50).fillX().fillY();
-        startButton.addListener(new InputListener(){
+        ImageButtonStyle playStyle =  new ImageButtonStyle();
+        playStyle.imageUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playInactive.png"))));
+        playStyle.imageDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playActive.png"))));
+        ImageButton playButton = new ImageButton(playStyle);
+        table.add(playButton).center();
+        table.row();
+
+        playButton.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 //As per libGDX docs this is needed to return true for the touchup event to trigger
@@ -59,7 +69,7 @@ public class TitleScreen extends ScreenAdapter {
                 game.setScreen(new GameScreen(game));
             }
         });
-
+        
         stage.addActor(table);
     }
 
@@ -68,6 +78,14 @@ public class TitleScreen extends ScreenAdapter {
         //Set the background colour & draw the stage
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        backgroundTexture = new TextureRegion(new Texture("spaceBackground.jpg"), 0, 0, 1920, 1080);
+        batch = new SpriteBatch();
+        batch.disableBlending();
+        batch.begin();
+        batch.draw(backgroundTexture, 0, 0);
+        batch.end();
+
         stage.draw();
     }
 
