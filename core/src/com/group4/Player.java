@@ -31,8 +31,9 @@ public class Player extends Actor {
     private long audioStart = 0;
 
 
-    public Player(Map map4){
-        this.map = map4;
+    public Player(Map map){
+        this.map = map;
+
         setPosition(map.worldPos(39), map.worldPos(40));
     }
 
