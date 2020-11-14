@@ -27,8 +27,8 @@ public class GameScreen extends ScreenAdapter {
     private Map map;
     private OrthographicCamera camera;
     private final float CameraLerp = 2f;
-    private SpriteBatch batch;
-    private TextureRegion backgroundTexture;
+    private SpriteBatch batch = new SpriteBatch();
+    private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
     public GameScreen (AuberGame game){
         this.game = game;
     }
@@ -41,11 +41,11 @@ public class GameScreen extends ScreenAdapter {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
+        camera.setToOrtho(false, w, h);
         camera.update();
 
         //Create the stage and allow it to process inputs. Using an Extend Viewport for scalability of the product
-        stage = new Stage(new ExtendViewport(w,h,camera));
+        stage = new Stage(new ExtendViewport(w/3f, h/3f, camera));
         Gdx.input.setInputProcessor(stage);
 
         //Load the map and create it
@@ -71,9 +71,11 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
         map.setView(camera);
 
-        //Render the objects. Rander the bg layers, then the player, then the foreground layers to give the effect of
+        //Render the objects. Render the bg layers, then the player, then the foreground layers to give the effect of
         //3d (as the player can go behind certain objects)
-        //backgroundTexture = new TextureRegion(new Texture("spaceBackground.jpg"), 0, 0, 1920, 1080);
+        batch.begin();
+        batch.draw(backgroundTexture, 0, 0);
+        batch.end();
         map.render(new int[]{0,1,2,3,4,5});
         stage.draw();
         map.render(new int[]{6,7});

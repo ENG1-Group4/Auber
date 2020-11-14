@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+//import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -26,8 +26,8 @@ public class TitleScreen extends ScreenAdapter {
 
     public AuberGame game;
     private Stage stage;
-    private SpriteBatch batch;
-    private TextureRegion backgroundTexture;
+    private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-Pink.png"), 0, 0, 1920, 1080);
+    private SpriteBatch batch = new SpriteBatch();
 
     public TitleScreen (AuberGame game){
         this.game = game;
@@ -42,6 +42,7 @@ public class TitleScreen extends ScreenAdapter {
         //Create the table and expand it to fill the window
         Table table = new Table();
         table.setFillParent(true);
+        
 
         //Create the logo and add it to the table
         Texture logoTexture = new Texture(Gdx.files.internal("img/logo.png"));
@@ -51,9 +52,11 @@ public class TitleScreen extends ScreenAdapter {
 
 
         //Create the start game button, add it to the table and it click event
-        ImageButtonStyle playStyle =  new ImageButtonStyle();
-        playStyle.imageUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playInactive.png"))));
-        playStyle.imageDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playActive.png"))));
+
+        ImageButton.ImageButtonStyle playStyle =  new ImageButton.ImageButtonStyle();
+        playStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playInactive.png"))));
+        playStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playActive.png"))));
+        playStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playActive.png"))));
         ImageButton playButton = new ImageButton(playStyle);
         table.add(playButton).center();
         table.row();
@@ -79,13 +82,12 @@ public class TitleScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        backgroundTexture = new TextureRegion(new Texture("spaceBackground.jpg"), 0, 0, 1920, 1080);
-        batch = new SpriteBatch();
-        batch.disableBlending();
+        
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
         batch.end();
 
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
 
