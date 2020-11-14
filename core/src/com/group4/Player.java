@@ -21,7 +21,7 @@ public class Player extends Actor {
     private final Texture imageRight = new Texture(Gdx.files.internal("img/player_right.png"));
     private Texture currentImage = imageDown;
 
-    private float playerSpeed = 1f;
+    private float playerSpeed = 5f;
     private Map map;
     private int health = 100;
     private float healthTimer = 0;
@@ -37,6 +37,11 @@ public class Player extends Actor {
         //Move the player by a set amount if the keys are pressed.
         float deltaX = 0;
         float deltaY = 0;
+
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)  && health >= 0){
+            health -= 1;
+        }
+
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             deltaY += playerSpeed;
         }
@@ -86,7 +91,6 @@ public class Player extends Actor {
                 health += 1;
                 healthTimer = 0f;
             }
-            System.out.println(health);
         }
 
 
