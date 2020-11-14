@@ -38,10 +38,6 @@ public class Player extends Actor {
         float deltaX = 0;
         float deltaY = 0;
 
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)  && health >= 0){
-            health -= 1;
-        }
-
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             deltaY += playerSpeed;
         }

@@ -52,7 +52,7 @@ public class HealthBar extends Actor {
         shapeRenderer.setColor(0,0,0,0.4f);
         shapeRenderer.circle(circleCenterX,circleCenterY,radius);
 
-        //Draw health bar
+        //Draw health bar + use a gradient to change the colour depending on healthPercentage
         shapeRenderer.setColor(new Color().set(1,0,0,1).lerp(0,1,0,1, healthPercentage));
         shapeRenderer.arc(circleCenterX,circleCenterY, radius,270,361 - (360 * (1-healthPercentage)), 400);
 
