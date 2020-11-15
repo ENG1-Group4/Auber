@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 
 /**
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
@@ -27,13 +28,19 @@ public class GameScreen extends ScreenAdapter {
     private Player player;
     private Map map;
     private OrthographicCamera camera;
-    private final float CameraLerp = 2f;
+
+    private final float CameraLerp = 1f;
     private SpriteBatch batch = new SpriteBatch();
+    private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.ogg"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
+
     public GameScreen (AuberGame game){
         this.game = game;
+        ambience.play();
+        ambience.setLooping(true);
+        ambience.setVolume(0.6f);
     }
-
+    
     @Override
     public void show() {
 
@@ -56,7 +63,6 @@ public class GameScreen extends ScreenAdapter {
         //Create the player and add it to the stage
         player = new Player(map);
         stage.addActor(player);
-
     }
 
     @Override
