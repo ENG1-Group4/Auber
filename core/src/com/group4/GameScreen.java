@@ -81,8 +81,6 @@ public class GameScreen extends ScreenAdapter {
         map.render(new int[]{6,7});
     }
 
-
-
     @Override
     public void resize(int width, int height) {
         //Update the viewport side, and recenter it.

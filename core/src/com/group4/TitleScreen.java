@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-//import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -42,23 +41,20 @@ public class TitleScreen extends ScreenAdapter {
         //Create the table and expand it to fill the window
         Table table = new Table();
         table.setFillParent(true);
-        
 
         //Create the logo and add it to the table
-        Texture logoTexture = new Texture(Gdx.files.internal("img/logo.png"));
+        Texture logoTexture = new Texture(Gdx.files.internal("menu/auberLogo.png"));
         Image logo = new Image(logoTexture);
         table.add(logo).pad(10).fillY().align(Align.center);
         table.row();
 
-
-        //Create the start game button, add it to the table and it click event
-
+        //Create the start game button, add it to the table with its click event
         ImageButton.ImageButtonStyle playStyle =  new ImageButton.ImageButtonStyle();
-        playStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playInactive.png"))));
-        playStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playActive.png"))));
-        playStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playActive.png"))));
+        playStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonInactive.png"))));
+        playStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonActive.png"))));
+        playStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonActive.png"))));
         ImageButton playButton = new ImageButton(playStyle);
-        table.add(playButton).center();
+        table.add(playButton).center().pad(5);
         table.row();
 
         playButton.addListener(new InputListener(){
@@ -72,7 +68,49 @@ public class TitleScreen extends ScreenAdapter {
                 game.setScreen(new GameScreen(game));
             }
         });
-        
+
+        //Create the instructions button, add it to the table with its click event
+        ImageButton.ImageButtonStyle instructionsStyle =  new ImageButton.ImageButtonStyle();
+        instructionsStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonInactive.png"))));
+        instructionsStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonActive.png"))));
+        instructionsStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonActive.png"))));
+        ImageButton instructionsButton = new ImageButton(instructionsStyle);
+        table.add(instructionsButton).center().pad(5);
+        table.row();
+
+        instructionsButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                //As per libGDX docs this is needed to return true for the touchup event to trigger
+                return true;
+            }
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new Instructions(game));
+            }
+        });
+
+        //Create the quit game button, add it to the table with its click event
+        ImageButton.ImageButtonStyle quitStyle =  new ImageButton.ImageButtonStyle();
+        quitStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonInactive.png"))));
+        quitStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonActive.png"))));
+        quitStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonActive.png"))));
+        ImageButton quitButton = new ImageButton(quitStyle);
+        table.add(quitButton).center().pad(5);
+        table.row();
+
+        quitButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                //As per libGDX docs this is needed to return true for the touchup event to trigger
+                return true;
+            }
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.exit();
+            }
+        });
+
         stage.addActor(table);
     }
 
