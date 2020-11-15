@@ -4,12 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.Input.Keys;
 
 /**
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
@@ -23,7 +27,9 @@ public class GameScreen extends ScreenAdapter {
     private Player player;
     private Map map;
     private OrthographicCamera camera;
-    private final float CameraLerp =1f;
+    private final float CameraLerp = 2f;
+    private SpriteBatch batch = new SpriteBatch();
+    private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
     public GameScreen (AuberGame game){
         this.game = game;
     }
@@ -36,11 +42,11 @@ public class GameScreen extends ScreenAdapter {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
+        camera.setToOrtho(false, w, h);
         camera.update();
 
         //Create the stage and allow it to process inputs. Using an Extend Viewport for scalability of the product
-        stage = new Stage(new ExtendViewport(w,h,camera));
+        stage = new Stage(new ExtendViewport(w/3f, h/3f, camera));
         Gdx.input.setInputProcessor(stage);
 
         //Load the map and create it
@@ -66,14 +72,19 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
         map.setView(camera);
 
-        //Render the objects. Rander the bg layers, then the player, then the foreground layers to give the effect of
+        //Render the objects. Render the bg layers, then the player, then the foreground layers to give the effect of
         //3d (as the player can go behind certain objects)
+        batch.begin();
+        batch.draw(backgroundTexture, 0, 0);
+        batch.end();
         map.render(new int[]{0,1,2,3,4,5});
         stage.draw();
         map.render(new int[]{6,7});
+
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+            game.setScreen(new TitleScreen(game));
+        }
     }
-
-
 
     @Override
     public void resize(int width, int height) {
@@ -81,4 +92,10 @@ public class GameScreen extends ScreenAdapter {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
 
+    @Override
+    public void dispose(){
+        batch.dispose();
+        map.dispose();
+        stage.dispose();
+    }
 }

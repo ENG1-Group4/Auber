@@ -21,7 +21,6 @@ public class AuberGame extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		setScreen(new TitleScreen(this));
 	}
 
