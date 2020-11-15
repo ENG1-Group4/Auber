@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.audio.Sound;
 
 
 public class Instructions extends ScreenAdapter {
@@ -23,6 +24,7 @@ public class Instructions extends ScreenAdapter {
     private Stage stage;
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-Pink.png"), 0, 0, 1920, 1080);
     private SpriteBatch batch = new SpriteBatch();
+    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
 
     public Instructions (AuberGame game){
         this.game = game;
@@ -58,7 +60,9 @@ public class Instructions extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                menuSelect.play(0.5f);
                 game.setScreen(new TitleScreen(game));
+
             }
         });
         

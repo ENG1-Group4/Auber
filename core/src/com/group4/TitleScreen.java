@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.audio.Sound;
 
 /**
  * TitleScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the title screen.
@@ -27,6 +28,7 @@ public class TitleScreen extends ScreenAdapter {
     private Stage stage;
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-Pink.png"), 0, 0, 1920, 1080);
     private SpriteBatch batch = new SpriteBatch();
+    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
 
     public TitleScreen (AuberGame game){
         this.game = game;
@@ -34,6 +36,7 @@ public class TitleScreen extends ScreenAdapter {
 
     @Override
     public void show() {
+        
         //Create the stage and allow it to process inputs. Using an Extend Viewport for scalablity of the product
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
@@ -65,6 +68,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                menuSelect.play(0.5f);
                 game.setScreen(new GameScreen(game));
             }
         });
@@ -86,6 +90,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                menuSelect.play(0.5f);
                 game.setScreen(new Instructions(game));
             }
         });
@@ -107,6 +112,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                menuSelect.play(0.5f);
                 Gdx.app.exit();
             }
         });
@@ -119,7 +125,6 @@ public class TitleScreen extends ScreenAdapter {
         //Set the background colour & draw the stage
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
         
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
@@ -134,5 +139,12 @@ public class TitleScreen extends ScreenAdapter {
         //Update the viewport side, and recenter it.
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     }
+
+    @Override
+    public void dispose () {
+        menuSelect.dispose();
+        batch.dispose();
+        stage.dispose();
+	}
 
 }

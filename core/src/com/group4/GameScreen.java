@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.Input.Keys;
 
 /**
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
@@ -79,6 +80,10 @@ public class GameScreen extends ScreenAdapter {
         map.render(new int[]{0,1,2,3,4,5});
         stage.draw();
         map.render(new int[]{6,7});
+
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+            game.setScreen(new TitleScreen(game));
+        }
     }
 
     @Override
@@ -87,4 +92,10 @@ public class GameScreen extends ScreenAdapter {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
 
+    @Override
+    public void dispose(){
+        batch.dispose();
+        map.dispose();
+        stage.dispose();
+    }
 }
