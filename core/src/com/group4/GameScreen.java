@@ -29,9 +29,9 @@ public class GameScreen extends ScreenAdapter {
     private Map map;
     private OrthographicCamera camera;
 
-    private final float CameraLerp = 1f;
+    private final float CameraLerp = 2f;
     private SpriteBatch batch = new SpriteBatch();
-    private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.ogg"));
+    private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
 
     public GameScreen (AuberGame game){
@@ -88,6 +88,7 @@ public class GameScreen extends ScreenAdapter {
         map.render(new int[]{6,7});
 
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+            ambience.stop();
             game.setScreen(new TitleScreen(game));
         }
     }
