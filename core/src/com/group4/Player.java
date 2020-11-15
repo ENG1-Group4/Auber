@@ -24,7 +24,7 @@ public class Player extends Actor {
     private Texture currentImage = imageDown;
     private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
 
-    private float playerSpeed = 2.5f;
+    private float playerSpeed = 2f;
     private Map map;
     private int health = 100;
     private float healthTimer = 0;
