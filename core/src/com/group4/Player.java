@@ -60,10 +60,10 @@ public class Player extends Actor {
         }
 
         //Check the space is empty before moving into it
-        if (map.Empty(getX() + deltaX, getY(), currentImage.getWidth(), currentImage.getHeight())){
+        if (map.Empty(getX() + deltaX, getY(), 20, 20)){
             moveBy(deltaX, 0);
         }
-        if (map.Empty(getX(), getY() + deltaY, currentImage.getWidth(), currentImage.getHeight())){
+        if (map.Empty(getX(), getY() + deltaY, 20, 20)){
             moveBy(0, deltaY);
         }
 
