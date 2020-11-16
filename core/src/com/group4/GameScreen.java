@@ -31,7 +31,7 @@ public class GameScreen extends ScreenAdapter {
 
     private HUD HUD;
     private final float CameraLerp = 2f;
-    private SpriteBatch batch = new Spritebatch();
+    private SpriteBatch batch = new SpriteBatch();
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
 
@@ -93,8 +93,6 @@ public class GameScreen extends ScreenAdapter {
 
         //Draw the HUD
         HUD.draw();
-    }
-
 
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
             ambience.stop();
