@@ -24,7 +24,9 @@ public class Player extends Actor {
     private Texture currentImage = imageDown;
     private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
 
+
     private float playerSpeed = 1.5f;
+
     private Map map;
     private int health = 100;
     private float healthTimer = 0;
@@ -43,6 +45,7 @@ public class Player extends Actor {
         //Move the player by a set amount if the keys are pressed.
         float deltaX = 0;
         float deltaY = 0;
+
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             deltaY += playerSpeed;
         }
@@ -73,15 +76,6 @@ public class Player extends Actor {
                 audioStart = TimeUtils.nanoTime();
             }
 
-            //Player Health
-            if (map.Effect(2,this)){
-                healthTimer += Gdx.graphics.getDeltaTime();
-                if(healthTimer >= 0.1f && health > 100) {
-                    health ++;
-                    healthTimer = 0f;
-                }
-            }
-
             //Change the image
             if (Math.abs(deltaX) >= Math.abs(deltaY)) {
                 if(deltaX > 0){
@@ -99,9 +93,23 @@ public class Player extends Actor {
 
         }
 
+        //Player Health
+        if (map.Effect(2,this)){
+            healthTimer += Gdx.graphics.getDeltaTime();
+            if(healthTimer >= 0.1f && health < 100) {
+                health += 1;
+                healthTimer = 0f;
+            }
+        }
+
+
         //Draw the image
         batch.draw(currentImage, getX(), getY(), currentImage.getWidth(), currentImage.getHeight());
     }
 
 
+    public int getHealth(){
+        return health;
+    }
 }
+

@@ -29,10 +29,12 @@ public class GameScreen extends ScreenAdapter {
     private Map map;
     private OrthographicCamera camera;
 
+    private HUD HUD;
     private final float CameraLerp = 2f;
-    private SpriteBatch batch = new SpriteBatch();
+    private SpriteBatch batch = new Spritebatch();
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
+
 
     public GameScreen (AuberGame game){
         this.game = game;
@@ -43,8 +45,6 @@ public class GameScreen extends ScreenAdapter {
     
     @Override
     public void show() {
-
-
         //Create the camera
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -63,6 +63,10 @@ public class GameScreen extends ScreenAdapter {
         //Create the player and add it to the stage
         player = new Player(map);
         stage.addActor(player);
+
+        //Create the Heads up display
+        HUD = new HUD(player, tiledMap);
+
     }
 
     @Override
@@ -86,6 +90,11 @@ public class GameScreen extends ScreenAdapter {
         map.render(new int[]{0,1,2,3,4,5});
         stage.draw();
         map.render(new int[]{6,7});
+
+        //Draw the HUD
+        HUD.draw();
+    }
+
 
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
             ambience.stop();
