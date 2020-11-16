@@ -23,7 +23,7 @@ public class HUD extends Stage {
 
         //Create the health bar and add it to the stage
         healthBar = new HealthBar(player,scaledHeight);
-        healthBar.setPosition(5,5);
+        healthBar.setPosition(20,20);
         this.addActor(healthBar);
     }
 

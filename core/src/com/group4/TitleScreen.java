@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Input.Keys;
 
@@ -30,13 +31,22 @@ public class TitleScreen extends ScreenAdapter {
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-Pink.png"), 0, 0, 1920, 1080);
     private SpriteBatch batch = new SpriteBatch();
     private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
+    public final Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
+    private boolean isMusicPlaying;
 
-    public TitleScreen (AuberGame game){
+    public TitleScreen (AuberGame game, boolean isMusicPlaying){
         this.game = game;
+        this.isMusicPlaying = isMusicPlaying;
     }
 
     @Override
     public void show() {
+
+        if(isMusicPlaying == false){
+            menuMusic.play();
+            menuMusic.setVolume(0.05f);
+            menuMusic.setLooping(true);
+        }
         
         //Create the stage and allow it to process inputs. Using an Extend Viewport for scalablity of the product
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
@@ -69,6 +79,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                menuMusic.stop();
                 menuSelect.play(0.2f);
                 game.setScreen(new GameScreen(game));
             }
@@ -92,6 +103,7 @@ public class TitleScreen extends ScreenAdapter {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 menuSelect.play(0.2f);
+                menuMusic.pause();
                 game.setScreen(new Instructions(game));
             }
         });
@@ -148,6 +160,8 @@ public class TitleScreen extends ScreenAdapter {
     @Override
     public void dispose () {
         menuSelect.dispose();
+        menuMusic.stop();
+        menuMusic.dispose();
         batch.dispose();
         stage.dispose();
 	}

@@ -108,7 +108,7 @@ public class GameScreen extends ScreenAdapter {
 
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
             ambience.stop();
-            game.setScreen(new TitleScreen(game));
+            game.setScreen(new TitleScreen(game, false));
         }
     }
 
