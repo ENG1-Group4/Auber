@@ -23,7 +23,7 @@ public class GridNode {
         this.index = index;
     }
     public Set<Pos> ConnectingCoords(){
-        if (!calced){
+        if (calced){
             return coords;
         }
         return _ConnectingCoords(1);
@@ -60,8 +60,8 @@ public class GridNode {
         coords = new HashSet<Pos>();
         ArrayList<Pos> blottPool = new ArrayList<Pos>();
         for (Pos pos : Adjacent(x,y)) {
-            int nx = pos.x + x;
-            int ny = pos.y + y;
+            int nx = pos.x;
+            int ny = pos.y;
             if (map.Empty(nx,ny)){
                 coords.add(new Pos(nx,ny));
                 for (Pos pos2 : Adjacent(nx,ny)) {

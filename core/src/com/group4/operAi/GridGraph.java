@@ -9,16 +9,17 @@ import com.badlogic.gdx.utils.Array;
 import com.group4.Map;
 
 public class GridGraph implements IndexedGraph<GridNode>{//this is the main pathfinding one
-    GridHeur GridHeuristic = new GridHeur();
+    GridHeur gridHeuristic = new GridHeur();
     Array<Connection<GridNode>>[][] paths;
     public GridNode[][] GridMap;
     Map map;
     private int lastNodeIndex = 0;
 
-    public GridGraph(Map map,int x, int y){//x and y of interia position
+    public GridGraph(Map map,int x, int y){//x and y of an internal position
         this.map = map;
         GridMap = new GridNode[map.intMap.length][map.intMap[0].length];
-        for (int i = 0; i < map.intMap[0].length; i++) {
+        paths = new Array[map.intMap[0].length][];
+        for (int i = 0; i < map.intMap.length; i++) {
             paths[i] = new Array[map.intMap[0].length];
             for (int j = 0; j < map.intMap.length ; j++) {
                 paths[i][j] = new Array<Connection<GridNode>>();
@@ -31,8 +32,10 @@ public class GridGraph implements IndexedGraph<GridNode>{//this is the main path
         for (GridNode.Pos coord : GridMap[x][y].ConnectingCoords()) {
             if (GridMap[coord.x][coord.y] == null){
                 addNode(coord.x,coord.y);
-                paths[coord.x][coord.y].add(new GridPath(GridMap[x][y],GridMap[coord.x][coord.y]));
+                paths[x][y].add(new GridPath(GridMap[x][y],GridMap[coord.x][coord.y]));
                 Tree(coord.x,coord.y);
+            } else {
+                paths[x][y].add(new GridPath(GridMap[x][y],GridMap[coord.x][coord.y]));
             }
         }
     }
@@ -43,9 +46,9 @@ public class GridGraph implements IndexedGraph<GridNode>{//this is the main path
         GridMap[x][y] = node;
   }
   public GraphPath<GridNode> findPath(GridNode startNode, GridNode goalNode){
-    GraphPath<GridNode> cityPath = new DefaultGraphPath<>();
-    new IndexedAStarPathFinder<>(this).searchNodePath(startNode, goalNode, GridHeuristic, cityPath);
-    return cityPath;
+    GraphPath<GridNode> path = new DefaultGraphPath<>();
+    new IndexedAStarPathFinder<>(this).searchNodePath(startNode, goalNode, gridHeuristic, path);
+    return path;
   }
 
   @Override

@@ -22,11 +22,15 @@ public class GSystem extends Actor {
         gridX = x;
         gridY = y;
         systemsRemaining.add(this);
-        setBounds((float) x*32,(float) y*32,(float) w*31,(float) h*31);
+        int tilewidth = map.properties.get("tilewidth", Integer.class);
+        setBounds((float) x*tilewidth,(float) y*tilewidth,(float) w*(tilewidth - 1),(float) h*(tilewidth - 1));
         map.autoEnter(this);
     }
     public GSystem(int x, int y, Map map, int room, int health){//assumes 1x1 system
         this(x,y,1,1,map,room,health);
+    }
+    public GSystem(int x, int y, Map map, int room){//assumes 1x1 system
+        this(x,y,1,1,map,room,100);
     }
     @Override
     public void draw(Batch batch, float parentAlpha){//just used as it is called each frame
