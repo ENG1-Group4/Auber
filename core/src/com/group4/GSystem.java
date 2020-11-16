@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.group4.Map;
 
 public class GSystem extends Actor {
+    public AuberGame game;
     public int health;
     int healthMax;
     int room;
@@ -44,10 +45,10 @@ public class GSystem extends Actor {
     public void onDeath(){
         map.autoLeave(this);
         systemsRemaining.remove(this);
-        remove();//so its .draw() isn't called
+        remove(); //so its .draw() isn't called
         if (systemsRemaining.size() == 0){
-            //gameover man
+            game.setScreen(new GameEndScreen(game, false));
         }
     }
+    
 }
-
