@@ -59,14 +59,26 @@ public class GameScreen extends ScreenAdapter {
         //Load the map and create it
         TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
         map = new Map(tiledMap, Gdx.files.internal("map").readString());
-
+        String[] datas = Gdx.files.internal("mapdata").readString().split("\\r?\\n");
         //Create the player and add it to the stage
         player = new Player(map);
         stage.addActor(player);
 
+        //String[] coords = datas[0].split(",");
+        //stage.addActor(new Player(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map));
+        //create systems + add them to the stage
+        for (String coord : datas[1].split(":")) {
+            String[] coords = coord.split(",");
+            stage.addActor(new GSystem(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map, 1));
+        }
+        //create operatives + add them to the stage
+        for (String coord : datas[2].split(":")) {
+            String[] coords = coord.split(",");
+            stage.addActor(new Operative(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]),map));
+        }
+
         //Create the Heads up display
         HUD = new HUD(player, tiledMap);
-
     }
 
     @Override

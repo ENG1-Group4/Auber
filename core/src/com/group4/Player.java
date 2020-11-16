@@ -26,7 +26,6 @@ public class Player extends Actor {
 
 
     private float playerSpeed = 1.5f;
-
     private Map map;
     private int health = 100;
     private float healthTimer = 0;
