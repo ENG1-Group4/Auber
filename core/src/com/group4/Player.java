@@ -71,7 +71,7 @@ public class Player extends Actor {
             
             //Sets the footstep sound effect to play at 0.32 sec intervals when the player is moving
             if (TimeUtils.timeSinceNanos(audioStart) > 320000000) {
-                step.play(0.4f);
+                step.play(0.25f);
                 audioStart = TimeUtils.nanoTime();
             }
 
