@@ -1,5 +1,4 @@
 package com.group4;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,42 +16,47 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.audio.Sound;
 
-
-public class Instructions extends ScreenAdapter {
-
+public class GameEndScreen extends ScreenAdapter {
     public AuberGame game;
+    private boolean playerWon;
     private Stage stage;
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-Pink.png"), 0, 0, 1920, 1080);
-    private SpriteBatch batch = new SpriteBatch();
     private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
+    private SpriteBatch batch = new SpriteBatch();
 
-    public Instructions (AuberGame game){
+    public GameEndScreen (AuberGame game, boolean playerWon){
         this.game = game;
+        this.playerWon = playerWon;
     }
 
     @Override
     public void show() {
-        //Create the stage and allow it to process inputs. Using an Extend Viewport for scalablity of the product
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
-
+        
         Table table = new Table();
-        table.top();
         table.setFillParent(true);
 
-        Texture logoTexture = new Texture(Gdx.files.internal("menu/auberLogo.png"));
-        Image logo = new Image(logoTexture);
-        table.add(logo).width(914.9f).height(270.9f).pad(20).align(Align.top);
-        table.row();
+        if(playerWon == true){
+            Texture gameWin = new Texture(Gdx.files.internal("gameWin.png"));
+            Image win = new Image(gameWin);
+            table.add(win).width(win.getWidth()*2.3f).height(win.getHeight()*2.3f).pad(40).align(Align.center);
+            table.row();
+        } else {
+            Texture gameEnd = new Texture(Gdx.files.internal("gameOver.png"));
+            Image end = new Image(gameEnd);
+            table.add(end).width(end.getWidth()*2.5f).height(end.getHeight()*2.5f).pad(40).align(Align.center);
+            table.row();
+        }
 
-        ImageButton.ImageButtonStyle backStyle =  new ImageButton.ImageButtonStyle();
-        backStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/backButtonInactive.png"))));
-        backStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/backButtonActive.png"))));
-        backStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/backButtonActive.png"))));
-        ImageButton backButton = new ImageButton(backStyle);
-        backButton.setPosition(20,20);
+        ImageButton.ImageButtonStyle menuStyle =  new ImageButton.ImageButtonStyle();
+        menuStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/menuButtonInactive.png"))));
+        menuStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/menuButtonActive.png"))));
+        menuStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/menuButtonActive.png"))));
+        ImageButton menuButton = new ImageButton(menuStyle);
+        table.add(menuButton).pad(30).align(Align.center);
 
-        backButton.addListener(new InputListener(){
+        menuButton.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 //As per libGDX docs this is needed to return true for the touchup event to trigger
@@ -66,7 +70,6 @@ public class Instructions extends ScreenAdapter {
             }
         });
         
-        stage.addActor(backButton);
         stage.addActor(table);
     }
 
@@ -76,7 +79,6 @@ public class Instructions extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
         batch.end();
@@ -84,11 +86,12 @@ public class Instructions extends ScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
-
+    
     @Override
-    public void resize(int width, int height) {
-        //Update the viewport side, and recenter it.
-        stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+    public void dispose () {
+        menuSelect.dispose();
+        batch.dispose();
+        stage.dispose();
     }
-
+    
 }

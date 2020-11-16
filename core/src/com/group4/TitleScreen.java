@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.Input.Keys;
 
 /**
  * TitleScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the title screen.
@@ -68,7 +69,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                menuSelect.play(0.5f);
+                menuSelect.play(0.2f);
                 game.setScreen(new GameScreen(game));
             }
         });
@@ -90,7 +91,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                menuSelect.play(0.5f);
+                menuSelect.play(0.2f);
                 game.setScreen(new Instructions(game));
             }
         });
@@ -112,7 +113,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                menuSelect.play(0.5f);
+                menuSelect.play(0.2f);
                 Gdx.app.exit();
             }
         });
@@ -132,6 +133,10 @@ public class TitleScreen extends ScreenAdapter {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+            Gdx.app.exit();
+        }
     }
 
     @Override

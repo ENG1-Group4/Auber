@@ -28,4 +28,5 @@ public class AuberGame extends Game {
 	public void dispose () {
 		batch.dispose();
 	}
+
 }
