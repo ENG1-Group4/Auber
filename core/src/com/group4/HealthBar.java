@@ -20,6 +20,7 @@ public class HealthBar extends Actor {
     float size;
     Player player;
     BitmapFont font = new BitmapFont();
+    Boolean setFontScale = true;
 
     /**
      *
@@ -66,8 +67,18 @@ public class HealthBar extends Actor {
         batch.begin();
 
         //Draw the health bar text
+        if (setFontScale){
+            //Set the scale on the first time through
+            float textScale = ((radius * 0.75f ) - 20) / getTextLayout().width;
+            font.getData().setScale(textScale);
+            setFontScale = false;
+        }
+
         font.setColor(1,1,1,1f);
-        GlyphLayout healthText = new GlyphLayout(font, String.valueOf(player.getHealth()));
-        font.draw(batch, healthText, circleCenterX - healthText.width / 2, circleCenterY + font.getXHeight()/2);
+        font.draw(batch, getTextLayout(), circleCenterX - (getTextLayout().width )  / 2, circleCenterY + (font.getXHeight())/2);
+    }
+
+    private GlyphLayout getTextLayout(){
+        return new GlyphLayout(font, String.valueOf(player.getHealth()));
     }
 }
