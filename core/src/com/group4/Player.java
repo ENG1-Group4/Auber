@@ -21,6 +21,8 @@ public class Player extends Actor {
     private final Texture imageUp = new Texture(Gdx.files.internal("img/player_up.png"));
     private final Texture imageLeft = new Texture(Gdx.files.internal("img/player_left.png"));
     private final Texture imageRight = new Texture(Gdx.files.internal("img/player_right.png"));
+    private final Texture imageAttack = new Texture(Gdx.files.internal("img/attack.png"));
+    private final Texture imageTarget = new Texture(Gdx.files.internal("img/target.png"));
     private Texture currentImage = imageDown;
     private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
 
@@ -30,7 +32,7 @@ public class Player extends Actor {
     private int health = 100;
     private float healthTimer = 0;
     private long audioStart = 0;
-
+    private int attackDelay = 0;
 
     public Player(Map map){
         this.map = map;
@@ -44,7 +46,6 @@ public class Player extends Actor {
         //Move the player by a set amount if the keys are pressed.
         float deltaX = 0;
         float deltaY = 0;
-
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             deltaY += playerSpeed;
         }
@@ -57,7 +58,6 @@ public class Player extends Actor {
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             deltaX += playerSpeed;
         }
-
         //Check the space is empty before moving into it
         if (map.Empty(getX() + deltaX, getY(), 20, 20)){
             moveBy(deltaX, 0);
@@ -92,6 +92,41 @@ public class Player extends Actor {
 
         }
 
+        if(Gdx.input.isKeyPressed(Input.Keys.F)){//attack
+            float xAtt = getX() - 6f;
+            float yAtt = getY() - 6f;
+            float wAtt = imageAttack.getWidth();//assuming square
+            //attack direction
+            if(currentImage == imageRight){//attack right
+                xAtt += 32;
+            }else if (currentImage == imageLeft) { //attack left
+                xAtt -= 32;
+            }else if(currentImage == imageUp){//attack up
+                yAtt  += 32;
+            }else if (currentImage == imageDown) {//attack down
+                yAtt  -= 32;
+            }
+            //do attack
+            if (attackDelay == 0){
+                for (Actor thing : map.GetEnts(xAtt, yAtt, wAtt, wAtt)) {
+                    if (thing instanceof Operative){
+                        Operative target = (Operative) thing;
+                        target.onHit(this, 20);
+                    }
+                }
+                attackDelay = 61;
+                //display attack
+                batch.draw(imageAttack, xAtt, yAtt, wAtt, wAtt);
+            } else {
+                //display uncharged attack
+                batch.draw(imageTarget, xAtt, yAtt, wAtt, wAtt);
+            }
+            
+        }
+        //attack delay
+        if (attackDelay > 0){
+            attackDelay -= 1;
+        }
         //Player Health
         if (map.Effect(2,this)){
             healthTimer += Gdx.graphics.getDeltaTime();

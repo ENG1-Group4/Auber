@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.group4.operAi.GridGraph;
 import com.group4.operAi.GridNode;
 import java.lang.Math;
+import java.util.ArrayList;
 
 public class Operative extends Actor {
   private Texture image = new Texture(Gdx.files.internal("img/operative.png"));
@@ -17,9 +18,10 @@ public class Operative extends Actor {
   private float w = 20f;
   private float h = 20f;
   private GSystem target;
+  private static int remainingOpers = 0;
   private boolean isHacking = false;
   private boolean combat = false;
-  private static int remainingOpers = 0;
+  private static ArrayList<GSystem> untargetedSystems = new ArrayList<GSystem>();;
   private int delay = 0;
   public static GridGraph pathfinder;
   private GraphPath<GridNode> currentPath;
@@ -30,13 +32,21 @@ public class Operative extends Actor {
     remainingOpers += 1;
     setPosition(map.worldPos(x), map.worldPos(y));
     if (pathfinder == null){pathfinder = new GridGraph(map,x,y);}
+    if (untargetedSystems.size() == 0){untargetedSystems.addAll(GSystem.systemsRemaining);}
     chooseTarget();
   }
 
   public void chooseTarget() {
-    if (GSystem.systemsRemaining.size() == 0)//SHOULDN'T BE POSSIBLE
-      throw new RuntimeException("no remaining targets");
-    target = GSystem.systemsRemaining.get((int) Math.round(Math.random() * (GSystem.systemsRemaining.size() - 1)));
+    if (untargetedSystems.size() == 0){
+      if (GSystem.systemsRemaining.size() == 0){//SHOULDN'T BE POSSIBLE
+        throw new RuntimeException("no remaining targets");
+      } else{
+        target = GSystem.systemsRemaining.get((int) Math.round(Math.random() * (GSystem.systemsRemaining.size() - 1)));
+      }
+    } else{
+      target = untargetedSystems.get((int) Math.round(Math.random() * (untargetedSystems.size() - 1)));
+      untargetedSystems.remove(target);
+    }
     currentPath = pathfinder.findPath(pathfinder.GridMap[map.gridPos(getX())][map.gridPos(getY())], pathfinder.GridMap[target.gridX][target.gridY]);
     nodeNum = 0;
   }
@@ -105,6 +115,7 @@ public class Operative extends Actor {
   public void onHit(Object by,int amount) {
     if (by instanceof Player){
       isHacking = false;
+      untargetedSystems.add(target);
       delay = 0;
       combat = true;
       health -= amount;
