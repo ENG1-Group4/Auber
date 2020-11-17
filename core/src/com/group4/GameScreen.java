@@ -120,6 +120,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void dispose(){
+        ambience.dispose();
         batch.dispose();
         map.dispose();
         stage.dispose();
