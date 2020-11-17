@@ -51,6 +51,12 @@ public class GridGraph implements IndexedGraph<GridNode>{//this is the main path
     return path;
   }
 
+  public GraphPath<GridNode> findPath(int startX,int startY, int goalX, int goalY){// map coords
+    GraphPath<GridNode> path = new DefaultGraphPath<>();
+    new IndexedAStarPathFinder<>(this).searchNodePath(GridMap[startX][startY], GridMap[goalX][goalY], gridHeuristic, path);
+    return path;
+  }
+
   @Override
   public Array<Connection<GridNode>> getConnections(GridNode fromNode) {
       return paths[fromNode.x][fromNode.y];

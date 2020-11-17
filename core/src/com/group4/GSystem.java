@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class GSystem extends Actor {
-    public AuberGame game;
+    public static AuberGame game;
     public int health;
     int healthMax;
     int room;

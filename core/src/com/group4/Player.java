@@ -17,12 +17,13 @@ import java.lang.Math;
  * @author Robert Watts
  */
 public class Player extends Actor {
+    public static AuberGame game;
     private final Texture imageDown = new Texture(Gdx.files.internal("img/player.png"));
     private final Texture imageUp = new Texture(Gdx.files.internal("img/player_up.png"));
     private final Texture imageLeft = new Texture(Gdx.files.internal("img/player_left.png"));
     private final Texture imageRight = new Texture(Gdx.files.internal("img/player_right.png"));
-    private final Texture imageAttack = new Texture(Gdx.files.internal("img/attack.png"));
-    private final Texture imageTarget = new Texture(Gdx.files.internal("img/target.png"));
+    private final Texture imageAttack = new Texture(Gdx.files.internal("img/player_attack.png"));
+    private final Texture imageTarget = new Texture(Gdx.files.internal("img/player_target.png"));
     private Texture currentImage = imageDown;
     private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
 
@@ -30,6 +31,8 @@ public class Player extends Actor {
     private float playerSpeed = 1.5f;
     private Map map;
     private int health = 100;
+    private float w = 20f;
+    private float h = 20f;
     private float healthTimer = 0;
     private long audioStart = 0;
     private int attackDelay = 0;
@@ -59,13 +62,14 @@ public class Player extends Actor {
             deltaX += playerSpeed;
         }
         //Check the space is empty before moving into it
-        if (map.Empty(getX() + deltaX, getY(), 20, 20)){
+        map.autoLeave(this,getX(),getY(), w, h);
+        if (map.Empty(getX() + deltaX, getY(), w, h)){
             moveBy(deltaX, 0);
         }
-        if (map.Empty(getX(), getY() + deltaY, 20, 20)){
+        if (map.Empty(getX(), getY() + deltaY, w, h)){
             moveBy(0, deltaY);
         }
-
+        map.autoEnter(this,getX(),getY(), w, h);
         //See if the player has moved
         if (Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0){
             
@@ -108,7 +112,7 @@ public class Player extends Actor {
             }
             //do attack
             if (attackDelay == 0){
-                for (Actor thing : map.GetEnts(xAtt, yAtt, wAtt, wAtt)) {
+                for (Actor thing : map.InArea(xAtt, yAtt, wAtt, wAtt)) {
                     if (thing instanceof Operative){
                         Operative target = (Operative) thing;
                         target.onHit(this, 20);
@@ -140,8 +144,18 @@ public class Player extends Actor {
         //Draw the image
         batch.draw(currentImage, getX(), getY(), currentImage.getWidth(), currentImage.getHeight());
     }
-
-
+    public void onHit(Object by,int amount) {
+        if (by instanceof Operative){
+            health -= amount;
+            if (health <= 0) {
+            onDeath();
+            }
+        }
+    }
+    public void onDeath(){
+        map.autoLeave(this);
+        game.setScreen(new GameEndScreen(game, false));
+      }
     public int getHealth(){
         return health;
     }

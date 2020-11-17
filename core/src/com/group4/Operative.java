@@ -11,7 +11,9 @@ import java.lang.Math;
 import java.util.ArrayList;
 
 public class Operative extends Actor {
+  public static AuberGame game;
   private Texture image = new Texture(Gdx.files.internal("img/operative.png"));
+  private final Texture imageAttack = new Texture(Gdx.files.internal("img/operative_attack.png"));
   private int moveSpeed = 1;
   private Map map;
   private int health = 100;
@@ -21,6 +23,7 @@ public class Operative extends Actor {
   private static int remainingOpers = 0;
   private boolean isHacking = false;
   private boolean combat = false;
+  private int stuck = 0;
   private static ArrayList<GSystem> untargetedSystems = new ArrayList<GSystem>();;
   private int delay = 0;
   public static GridGraph pathfinder;
@@ -47,7 +50,8 @@ public class Operative extends Actor {
       target = untargetedSystems.get((int) Math.round(Math.random() * (untargetedSystems.size() - 1)));
       untargetedSystems.remove(target);
     }
-    currentPath = pathfinder.findPath(pathfinder.GridMap[map.gridPos(getX())][map.gridPos(getY())], pathfinder.GridMap[target.gridX][target.gridY]);
+    currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), target.gridX,target.gridY);
+    nodeNum = 0;
     nodeNum = 0;
   }
 
@@ -65,52 +69,110 @@ public class Operative extends Actor {
         delay += 1;
       }
     } else if (combat){
-      //TODO
+      //attack?
+      Player player = null;
+      for (Actor thing : map.InArea(getX(),getY(),32,32)) {
+        if (thing instanceof Player && delay == 0){
+          player = (Player) thing;
+          player.onHit(this,20);
+          batch.draw(imageAttack,getX(),getY(),32,32);
+          delay = 60;
+          return;//only one player
+        }
+      }
+      if (delay > 0){delay -= 1;}
+      //check if player still nearby
+      float size = 32*5;
+      player = null;
+      for (Actor thing : map.InArea(getX() + w/2 - size/2,getY() + h/2 - size/2,size,size)) {
+        if (thing instanceof Player){
+          player = (Player) thing;
+          break;//only one player
+        }
+      }
+      if (player == null){//end combat
+        combat = false;
+        delay = 0;
+        chooseTarget(); 
+      } else {//player nearby
+        //move
+        if (stuck > 0){
+          stuck -= 1;
+          move();
+          GridNode curNode = currentPath.get(nodeNum);
+          if (getX() == map.worldPos(curNode.x) && getY() == map.worldPos(curNode.y)){//next node
+            nodeNum += 1;
+          }
+        }else{
+          float xdif = player.getX() - getX();
+          float ydif = player.getY() - getY();
+          float deltaX;
+          float deltaY;
+          if (xdif >= 0){
+            deltaX = Math.min(moveSpeed,xdif);
+          } else{
+            deltaX = Math.max(-moveSpeed,xdif);
+          }
+          if (ydif >= 0){
+            deltaY = Math.min(moveSpeed,ydif);
+          } else{
+            deltaY = Math.max(-moveSpeed,ydif);
+          }
+          // Check the space is empty before moving into it
+          if (map.Empty(getX() + deltaX, getY() + deltaY, w, h)) {
+            map.autoLeave(this,getX(),getY(), w, h);
+            moveBy(deltaX, deltaY);
+            map.autoEnter(this,getX(),getY(), w, h);
+          } else {//if stuck pathfind to the player
+            currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), map.gridPos(player.getX()),map.gridPos(player.getY()));
+            nodeNum = 1;
+            stuck = 60;
+          }
+        }
+      }
     } else{ //moving
-      GridNode curNode = currentPath.get(nodeNum);
-      float xdif = map.worldPos(curNode.x) - getX();
-      float ydif = map.worldPos(curNode.y) - getY();
-      float deltaX;
-      float deltaY;
-      if (xdif >= 0){
-        deltaX = Math.min(moveSpeed,xdif);
-      } else{
-        deltaX = Math.max(-moveSpeed,xdif);
-      }
-      if (ydif >= 0){
-        deltaY = Math.min(moveSpeed,ydif);
-      } else{
-        deltaY = Math.max(-moveSpeed,ydif);
-      }
-
-      // Check the space is empty before moving into it
-      if (map.Empty(getX() + deltaX, getY(), w, h)) {
-        map.autoEnter(this,getX(),getY(), w, h);
-        moveBy(deltaX, deltaY);
-        map.autoLeave(this,getX(),getY(), w, h);
-      } else {
-        throw new RuntimeException("Path finding error");
-      }
+      move();
       
       //Check if we should start hacking
       if (getX() == target.getX() && getY() == target.getY()){
         isHacking = true;
+        batch.draw(imageAttack,getX(),getY(),32,32);
         batch.draw(image, getX(), getY(), image.getWidth(), image.getHeight());
         return;
       }
-      // for (Object ent : map.GetEnts(getX(), getY(), w, h)){
-      //   if (ent == target){
-      //     isHacking = true;
-      //     batch.draw(image, getX(), getY(), image.getWidth(), image.getHeight());
-      //     return;
-      //   }
-      // }
-      else if (getX() == map.worldPos(curNode.x) && getY() == map.worldPos(curNode.y)){//next node
+      GridNode curNode = currentPath.get(nodeNum);
+      if (getX() == map.worldPos(curNode.x) && getY() == map.worldPos(curNode.y)){//next node
         nodeNum += 1;
       }
     }
     // Draw the image
     batch.draw(image, getX(), getY(), image.getWidth(), image.getHeight());
+  }
+  private void move(){
+    GridNode curNode = currentPath.get(nodeNum);
+    float xdif = map.worldPos(curNode.x) - getX();
+    float ydif = map.worldPos(curNode.y) - getY();
+    float deltaX;
+    float deltaY;
+    if (xdif >= 0){
+      deltaX = Math.min(moveSpeed,xdif);
+    } else{
+      deltaX = Math.max(-moveSpeed,xdif);
+    }
+    if (ydif >= 0){
+      deltaY = Math.min(moveSpeed,ydif);
+    } else{
+      deltaY = Math.max(-moveSpeed,ydif);
+    }
+
+    // Check the space is empty before moving into it
+    if (map.Empty(getX() + deltaX, getY() + deltaY, w, h)) {
+      map.autoLeave(this,getX(),getY(), w, h);
+      moveBy(deltaX, deltaY);
+      map.autoEnter(this,getX(),getY(), w, h);
+    } else {
+      throw new RuntimeException("Path finding error");
+    }
   }
   public void onHit(Object by,int amount) {
     if (by instanceof Player){
@@ -129,7 +191,7 @@ public class Operative extends Actor {
     remainingOpers -= 1;
     remove();//so its .draw() isn't called
     if (remainingOpers == 0){
-       //game won man
+      game.setScreen(new GameEndScreen(game, true));
     }
   }
 }
