@@ -17,8 +17,6 @@ public class Operative extends Actor {
   private int moveSpeed = 1;
   private Map map;
   private int health = 100;
-  private float w = 20f;
-  private float h = 20f;
   private GSystem target;
   private static int remainingOpers = 0;
   private boolean isHacking = false;
@@ -33,7 +31,7 @@ public class Operative extends Actor {
   public Operative(int x, int y,Map map) {
     this.map = map;
     remainingOpers += 1;
-    setPosition(map.worldPos(x), map.worldPos(y));
+    setBounds(map.worldPos(x), map.worldPos(y),20f,20f);
     if (pathfinder == null){pathfinder = new GridGraph(map,x,y);}
     if (untargetedSystems.size() == 0){untargetedSystems.addAll(GSystem.systemsRemaining);}
     chooseTarget();
@@ -52,7 +50,6 @@ public class Operative extends Actor {
     }
     currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), target.gridX,target.gridY);
     nodeNum = 0;
-    nodeNum = 0;
   }
 
   @Override
@@ -60,6 +57,7 @@ public class Operative extends Actor {
     if (isHacking){
       if (delay == 18 - 1){//delay == A - 1, A is the number of frames an oponent must spend hacking to damage the system
         target.onHit(this, 1);//damage dealt per A frames
+        batch.draw(imageAttack,getX() - 6,getY() - 6,32,32);
         if (target.health <= 0){//they dead
           isHacking = false;
           chooseTarget();
@@ -71,11 +69,11 @@ public class Operative extends Actor {
     } else if (combat){
       //attack?
       Player player = null;
-      for (Actor thing : map.InArea(getX(),getY(),32,32)) {
+      for (Actor thing : map.InArea(getX() - 6,getY() - 6,31,31)) {
         if (thing instanceof Player && delay == 0){
           player = (Player) thing;
-          player.onHit(this,20);
-          batch.draw(imageAttack,getX(),getY(),32,32);
+          player.onHit(this,10);
+          batch.draw(imageAttack,getX() - 6,getY() - 6,32,32);
           delay = 60;
           return;//only one player
         }
@@ -83,8 +81,7 @@ public class Operative extends Actor {
       if (delay > 0){delay -= 1;}
       //check if player still nearby
       float size = 32*5;
-      player = null;
-      for (Actor thing : map.InArea(getX() + w/2 - size/2,getY() + h/2 - size/2,size,size)) {
+      for (Actor thing : map.InArea(getX() + getWidth()/2 - size/2 - 6,getY() + getHeight()/2 - size/2 - 6,size,size)) {
         if (thing instanceof Player){
           player = (Player) thing;
           break;//only one player
@@ -95,17 +92,21 @@ public class Operative extends Actor {
         delay = 0;
         chooseTarget(); 
       } else {//player nearby
+        //if (true){return;} //uncomment to kneecap them
         //move
+        GridNode curNode = currentPath.get(nodeNum - 1);//prevents cases where it reaches player before being unstuck
+        if (getX() - 6 == map.worldPos(curNode.x) && getY() - 6 == map.worldPos(curNode.y)){
+          stuck = 0;
+        }
         if (stuck > 0){
           stuck -= 1;
           move();
-          GridNode curNode = currentPath.get(nodeNum);
-          if (getX() == map.worldPos(curNode.x) && getY() == map.worldPos(curNode.y)){//next node
+          if (getX() - 6 == map.worldPos(curNode.x) && getY() - 6 == map.worldPos(curNode.y)){//next node
             nodeNum += 1;
           }
         }else{
-          float xdif = player.getX() - getX();
-          float ydif = player.getY() - getY();
+          float xdif = player.getX() - getX() + 6;
+          float ydif = player.getY() - getY() + 6;
           float deltaX;
           float deltaY;
           if (xdif >= 0){
@@ -119,10 +120,10 @@ public class Operative extends Actor {
             deltaY = Math.max(-moveSpeed,ydif);
           }
           // Check the space is empty before moving into it
-          if (map.Empty(getX() + deltaX, getY() + deltaY, w, h)) {
-            map.autoLeave(this,getX(),getY(), w, h);
+          if (map.Empty(getX() + deltaX, getY() + deltaY, getWidth(), getHeight())) {
+            map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
             moveBy(deltaX, deltaY);
-            map.autoEnter(this,getX(),getY(), w, h);
+            map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
           } else {//if stuck pathfind to the player
             currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), map.gridPos(player.getX()),map.gridPos(player.getY()));
             nodeNum = 1;
@@ -134,24 +135,23 @@ public class Operative extends Actor {
       move();
       
       //Check if we should start hacking
-      if (getX() == target.getX() && getY() == target.getY()){
+      if (getX() - 6 == target.getX() && getY() - 6 == target.getY()){
         isHacking = true;
-        batch.draw(imageAttack,getX(),getY(),32,32);
-        batch.draw(image, getX(), getY(), image.getWidth(), image.getHeight());
+        batch.draw(image, getX() -6, getY() -6, image.getWidth(), image.getHeight());
         return;
       }
       GridNode curNode = currentPath.get(nodeNum);
-      if (getX() == map.worldPos(curNode.x) && getY() == map.worldPos(curNode.y)){//next node
+      if (getX() - 6 == map.worldPos(curNode.x) && getY() - 6 == map.worldPos(curNode.y)){//next node
         nodeNum += 1;
       }
     }
     // Draw the image
-    batch.draw(image, getX(), getY(), image.getWidth(), image.getHeight());
+    batch.draw(image, getX() -6, getY() -6, image.getWidth(), image.getHeight());
   }
   private void move(){
     GridNode curNode = currentPath.get(nodeNum);
-    float xdif = map.worldPos(curNode.x) - getX();
-    float ydif = map.worldPos(curNode.y) - getY();
+    float xdif = map.worldPos(curNode.x) - getX() + 6;
+    float ydif = map.worldPos(curNode.y) - getY() + 6;
     float deltaX;
     float deltaY;
     if (xdif >= 0){
@@ -166,10 +166,10 @@ public class Operative extends Actor {
     }
 
     // Check the space is empty before moving into it
-    if (map.Empty(getX() + deltaX, getY() + deltaY, w, h)) {
-      map.autoLeave(this,getX(),getY(), w, h);
+    if (map.Empty(getX() + deltaX, getY() + deltaY, getWidth(), getHeight())) {
+      map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
       moveBy(deltaX, deltaY);
-      map.autoEnter(this,getX(),getY(), w, h);
+      map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
     } else {
       throw new RuntimeException("Path finding error");
     }

@@ -14,7 +14,7 @@ import java.lang.Math;
  * Handles key presses for play moment, as wll as drawing the player each frame.
  * The key press are polled rather than using events so that the player can move diagonally.
  *
- * @author Robert Watts
+ * @author Robert Watts, Adam Wiegand
  */
 public class Player extends Actor {
     public static AuberGame game;
@@ -31,16 +31,13 @@ public class Player extends Actor {
     private float playerSpeed = 1.5f;
     private Map map;
     private int health = 100;
-    private float w = 20f;
-    private float h = 20f;
     private float healthTimer = 0;
     private long audioStart = 0;
     private int attackDelay = 0;
 
-    public Player(Map map){
+    public Player(Map map,int x, int y){
         this.map = map;
-
-        setPosition(map.worldPos(39), map.worldPos(40));
+        setBounds(map.worldPos(x), map.worldPos(y),20f,20f);
     }
 
     @Override
@@ -62,14 +59,14 @@ public class Player extends Actor {
             deltaX += playerSpeed;
         }
         //Check the space is empty before moving into it
-        map.autoLeave(this,getX(),getY(), w, h);
-        if (map.Empty(getX() + deltaX, getY(), w, h)){
+        map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
+        if (map.Empty(getX() + deltaX, getY(), getWidth(), getHeight())){
             moveBy(deltaX, 0);
         }
-        if (map.Empty(getX(), getY() + deltaY, w, h)){
+        if (map.Empty(getX(), getY() + deltaY, getWidth(), getHeight())){
             moveBy(0, deltaY);
         }
-        map.autoEnter(this,getX(),getY(), w, h);
+        map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
         //See if the player has moved
         if (Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0){
             
@@ -97,7 +94,7 @@ public class Player extends Actor {
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.F)){//attack
-            float xAtt = getX() - 6f;
+            float xAtt = getX() - 12f;
             float yAtt = getY() - 6f;
             float wAtt = imageAttack.getWidth();//assuming square
             //attack direction
@@ -142,7 +139,7 @@ public class Player extends Actor {
 
 
         //Draw the image
-        batch.draw(currentImage, getX(), getY(), currentImage.getWidth(), currentImage.getHeight());
+        batch.draw(currentImage, getX() - 6, getY(), currentImage.getWidth(), currentImage.getHeight());
     }
     public void onHit(Object by,int amount) {
         if (by instanceof Operative){
