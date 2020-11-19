@@ -15,7 +15,7 @@ public class Operative extends Actor {
   private Texture image = new Texture(Gdx.files.internal("img/operative.png"));
   private final Texture imageAttack = new Texture(Gdx.files.internal("img/operative_attack.png"));
   private float offset = 6;//used to make the hitbox center on the image
-  private int moveSpeed = 1;
+  private float moveSpeed = 1.2f;
   private Map map;
   private int health = 100;
   private GSystem target;
@@ -81,7 +81,7 @@ public class Operative extends Actor {
       if (delay > 0){delay -= 1;}
       if (player == null){
         //check if player still nearby
-        float size = 32*5;
+        float size = 32*10;
         for (Actor thing : map.InArea(getX() + getWidth()/2 - size/2 - offset,getY() + getHeight()/2 - size/2 - offset,size,size)) {
           if (thing instanceof Player){
             player = (Player) thing;
@@ -113,9 +113,11 @@ public class Operative extends Actor {
       }
       
     }
+
     // Draw the image
     batch.draw(image, getX() -offset, getY() -offset, image.getWidth(), image.getHeight());
   }
+
   private void move(){
     GridNode curNode = currentPath.get(nodeNum);
     float xdif = map.worldPos(curNode.x) - getX() + offset;
