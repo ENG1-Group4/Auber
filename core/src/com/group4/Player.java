@@ -141,7 +141,7 @@ public class Player extends Actor {
         //Draw the image
         batch.draw(currentImage, getX() - 6, getY(), currentImage.getWidth(), currentImage.getHeight());
     }
-    public void onHit(Object by,int amount) {
+    public void onHit(Actor by,int amount) {
         if (by instanceof Operative){
             health -= amount;
             if (health <= 0) {

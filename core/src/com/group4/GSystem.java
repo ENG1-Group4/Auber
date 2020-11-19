@@ -40,7 +40,7 @@ public class GSystem extends Actor {
             health += 1;
         }
     }
-    public void onHit(Object by,int amount) {
+    public void onHit(Actor by,int amount) {
         if (by instanceof Operative){
             delay = 0;
             health -= amount;
