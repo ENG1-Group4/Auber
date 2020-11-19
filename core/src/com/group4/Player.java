@@ -93,7 +93,7 @@ public class Player extends Actor {
 
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.F)){//attack
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){//attack
             float xAtt = getX() - 12f;
             float yAtt = getY() - 6f;
             float wAtt = imageAttack.getWidth();//assuming square
