@@ -89,6 +89,10 @@ public class PlayerHealthBar extends Actor {
         font.draw(batch, getTextLayout(), circleCenterX - (getTextLayout().width )  / 2, circleCenterY + (font.getXHeight())/2);
     }
 
+    /**
+     * Get the label text layout
+     * @return GlyphLayout for use in a label
+     */
     private GlyphLayout getTextLayout(){
         return new GlyphLayout(font, String.valueOf(player.getHealth()));
     }

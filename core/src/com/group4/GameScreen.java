@@ -28,7 +28,6 @@ public class GameScreen extends ScreenAdapter {
     private Player player;
     private Map map;
     private OrthographicCamera camera;
-    private GSystem systems;
     private com.group4.HUD.HUD HUD;
     private final float CameraLerp = 2f;
     private SpriteBatch batch = new SpriteBatch();
@@ -78,8 +77,9 @@ public class GameScreen extends ScreenAdapter {
         }
 
         //Create the Heads up display
-        HUD = new HUD(player,systems);
+        HUD = new HUD(player);
         Gdx.input.setInputProcessor(HUD);
+        HUD.infoNotification("System Log started...");
     }
 
     @Override

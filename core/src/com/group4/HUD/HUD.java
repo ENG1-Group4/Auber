@@ -15,6 +15,8 @@ import com.group4.Player;
  */
 public class HUD extends Stage {
 
+    private HealthBar systemsHealthBar;
+    private HealthBar operativesHealthBar;
     Player player;
     PlayerHealthBar playerHealthBar;
     NotificationWindow notificationWindow;
@@ -34,20 +36,50 @@ public class HUD extends Stage {
         playerHealthBar.setPosition(xOffset,yOffset);
         this.addActor(playerHealthBar);
 
+        //Create the notification window and add it to the stage
         notificationWindow = new NotificationWindow(scaledHeight, scaledWidth, font);
         notificationWindow.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset);
         this.addActor(notificationWindow);
-        
+
+        //Create the system health bar and add it to the stage
+        systemsHealthBar = new HealthBar(50, scaledWidth, font, "System Health", GSystem.systemsRemaining.size());
+        systemsHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight);
+        this.addActor(systemsHealthBar);
     }
 
-
+    /**
+     * Add a success notification
+     *
+     * @param text the notification
+     */
     public void successNotification(String text){
         notificationWindow.addNotification(text, new Color(0,1,0,1));
     }
+
+    /**
+     * Add a info notification
+     *
+     * @param text the notification
+     */
     public void infoNotification(String text){
         notificationWindow.addNotification(text, new Color(1,1,1,1));
     }
+
+    /**
+     * Add a error notification
+     *
+     * @param text the notification
+     */
     public void errorNotification(String text){
         notificationWindow.addNotification(text, new Color(1,0,0,1));
+    }
+
+    /**
+     * Draw the stage. Overridden to update the health bars every render
+     */
+    @Override
+    public void draw(){
+        super.draw();
+        systemsHealthBar.setCurrentValue(GSystem.systemsRemaining.size());
     }
 }
