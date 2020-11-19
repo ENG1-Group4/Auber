@@ -5,10 +5,12 @@ import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.audio.Sound;
 import com.group4.operAi.GridGraph;
 import com.group4.operAi.GridNode;
 import java.lang.Math;
 import java.util.ArrayList;
+
 
 public class Operative extends Actor {
   public static AuberGame game;
@@ -27,6 +29,7 @@ public class Operative extends Actor {
   public static GridGraph pathfinder;
   private GraphPath<GridNode> currentPath;
   private int nodeNum;
+  private Sound metalDeath = Gdx.audio.newSound(Gdx.files.internal("audio/metalDeath.mp3"));
 
   public Operative(int x, int y,Map map) {
     this.map = map;
@@ -162,9 +165,11 @@ public class Operative extends Actor {
     }
   }
   public void onDeath(){
-    map.autoLeave(this);
+    map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
     remainingOpers -= 1;
     remove();//so its .draw() isn't called
+    image.dispose();
+    metalDeath.play(0.3f);
     if (remainingOpers == 0){
       game.setScreen(new GameEndScreen(game, true));
     }

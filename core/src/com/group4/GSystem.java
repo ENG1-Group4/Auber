@@ -50,7 +50,7 @@ public class GSystem extends Actor {
         }
     }
     public void onDeath(){
-        map.autoLeave(this);
+        map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
         systemsRemaining.remove(this);
         remove(); //so its .draw() isn't called
         if (systemsRemaining.size() == 0){
