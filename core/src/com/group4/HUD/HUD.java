@@ -2,6 +2,7 @@ package com.group4.HUD;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.group4.GSystem;
@@ -23,7 +24,7 @@ public class HUD extends Stage {
     final private float yOffset = 10;
     final private BitmapFont font = new BitmapFont();
 
-    public HUD(Player player, GSystem systems){
+    public HUD(Player player){
         this.player = player;
         float scaledHeight = Gdx.graphics.getHeight() * heightScale;
         float scaledWidth = Gdx.graphics.getWidth() * notificationWindowWidthScale;
@@ -36,5 +37,17 @@ public class HUD extends Stage {
         notificationWindow = new NotificationWindow(scaledHeight, scaledWidth, font);
         notificationWindow.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset);
         this.addActor(notificationWindow);
+        
+    }
+
+
+    public void successNotification(String text){
+        notificationWindow.addNotification(text, new Color(0,1,0,1));
+    }
+    public void infoNotification(String text){
+        notificationWindow.addNotification(text, new Color(1,1,1,1));
+    }
+    public void errorNotification(String text){
+        notificationWindow.addNotification(text, new Color(1,0,0,1));
     }
 }
