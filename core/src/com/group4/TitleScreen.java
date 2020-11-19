@@ -44,7 +44,7 @@ public class TitleScreen extends ScreenAdapter {
 
         if(isMusicPlaying == false){
             menuMusic.play();
-            menuMusic.setVolume(0.05f);
+            menuMusic.setVolume(0.1f);
             menuMusic.setLooping(true);
         }
         

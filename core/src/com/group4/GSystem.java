@@ -9,7 +9,7 @@ public class GSystem extends Actor {
     int healthMax;
     int room;
     Map map;
-    int healWait = 300;//how long before the system starts haling
+    int healWait = 300;//how long before the system starts healing
     int delay = 0;
     int gridX;
     int gridY;

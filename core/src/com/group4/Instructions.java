@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.Input.Keys;
 
 
 public class Instructions extends ScreenAdapter {
@@ -43,6 +44,11 @@ public class Instructions extends ScreenAdapter {
         Texture logoTexture = new Texture(Gdx.files.internal("menu/auberLogo.png"));
         Image logo = new Image(logoTexture);
         table.add(logo).width(914.9f).height(270.9f).pad(20).align(Align.top);
+        table.row();
+
+        Texture instructionsTexture = new Texture(Gdx.files.internal("menu/instructions.png"));
+        Image instructions = new Image(instructionsTexture);
+        table.add(instructions).align(Align.top);
         table.row();
 
         ImageButton.ImageButtonStyle backStyle =  new ImageButton.ImageButtonStyle();
@@ -83,6 +89,10 @@ public class Instructions extends ScreenAdapter {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+            game.setScreen(new TitleScreen(game, false));
+        }
     }
 
     @Override

@@ -34,12 +34,12 @@ public class GameScreen extends ScreenAdapter {
     private SpriteBatch batch = new SpriteBatch();
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
-    
+
     public GameScreen (AuberGame game){
         this.game = game;
         ambience.play();
         ambience.setLooping(true);
-        ambience.setVolume(0.6f);
+        ambience.setVolume(0.7f);
     }
     
     @Override

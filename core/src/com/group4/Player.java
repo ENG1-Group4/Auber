@@ -75,7 +75,7 @@ public class Player extends Actor {
             
             //Sets the footstep sound effect to play at 0.32 sec intervals when the player is moving
             if (TimeUtils.timeSinceNanos(audioStart) > 320000000) {
-                step.play(0.25f);
+                step.play(0.3f);
                 audioStart = TimeUtils.nanoTime();
             }
 
@@ -118,11 +118,11 @@ public class Player extends Actor {
                     if (thing instanceof Operative){
                         target = (Operative) thing;
                         target.onHit(this, 20);
-                        punch1.play(0.2f);
+                        punch1.play(0.20f);
                     }
                 }
                 if (target == null) {
-                    swing.play(0.4f);
+                    swing.play(0.45f);
                 }
                 attackDelay = 61;
                 //display attack
@@ -153,7 +153,7 @@ public class Player extends Actor {
 
     public void onHit(Actor by,int amount) {
         if (by instanceof Operative){
-            punch2.play(0.3f);
+            punch2.play(0.30f);
             health -= amount;
             if (health <= 0) {
             onDeath();
