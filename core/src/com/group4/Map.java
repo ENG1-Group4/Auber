@@ -193,7 +193,7 @@ public class Map extends OrthogonalTiledMapRenderer {
             float y2 = ent.getY();
             float w2 = ent.getWidth();
             float h2 = ent.getHeight();
-            if (x >= x2 + w2 || x2 >= x + w || y <= y2 + h2 || y2 <= y + h) {
+            if (!(x >= x2 + w2 || x2 >= x + w || y >= y2 + h2 || y2 >= y + h)) {
                 ents.add(ent);
             }
         }
