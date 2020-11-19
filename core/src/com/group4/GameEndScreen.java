@@ -41,14 +41,14 @@ public class GameEndScreen extends ScreenAdapter {
 
         if(playerWon == true){
             menuMusic.play();
-            menuMusic.setVolume(0.05f);
+            menuMusic.setVolume(0.1f);
             Texture gameWin = new Texture(Gdx.files.internal("gameWin.png"));
             Image win = new Image(gameWin);
             table.add(win).width(win.getWidth()*2.3f).height(win.getHeight()*2.3f).pad(40).align(Align.center);
             table.row();
         } else {
             menuMusic.play();
-            menuMusic.setVolume(0.05f);
+            menuMusic.setVolume(0.1f);
             Texture gameEnd = new Texture(Gdx.files.internal("gameOver.png"));
             Image end = new Image(gameEnd);
             table.add(end).width(end.getWidth()*2.5f).height(end.getHeight()*2.5f).pad(40).align(Align.center);

@@ -39,8 +39,8 @@ public class Operative extends Actor {
 
   public void chooseTarget() {
     if (untargetedSystems.size() == 0){
-      if (GSystem.systemsRemaining.size() == 0){//SHOULDN'T BE POSSIBLE
-        throw new RuntimeException("no remaining targets");
+      if (GSystem.systemsRemaining.size() == 0){
+        game.setScreen(new GameEndScreen(game, false));
       } else{
         target = GSystem.systemsRemaining.get((int) Math.round(Math.random() * (GSystem.systemsRemaining.size() - 1)));
       }
