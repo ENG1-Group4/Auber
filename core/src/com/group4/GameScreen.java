@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
+import com.group4.HUD.HUD;
 
 /**
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
@@ -28,8 +28,8 @@ public class GameScreen extends ScreenAdapter {
     private Player player;
     private Map map;
     private OrthographicCamera camera;
-
-    private HUD HUD;
+    private GSystem systems;
+    private com.group4.HUD.HUD HUD;
     private final float CameraLerp = 2f;
     private SpriteBatch batch = new SpriteBatch();
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
@@ -54,7 +54,7 @@ public class GameScreen extends ScreenAdapter {
 
         //Create the stage and allow it to process inputs. Using an Extend Viewport for scalability of the product
         stage = new Stage(new ExtendViewport(w/3f, h/3f, camera));
-        Gdx.input.setInputProcessor(stage);
+
 
         //Load the map and create it
         TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
@@ -78,7 +78,8 @@ public class GameScreen extends ScreenAdapter {
         }
 
         //Create the Heads up display
-        HUD = new HUD(player, tiledMap);
+        HUD = new HUD(player,systems);
+        Gdx.input.setInputProcessor(HUD);
     }
 
     @Override
