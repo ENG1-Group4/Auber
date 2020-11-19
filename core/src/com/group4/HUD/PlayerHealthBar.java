@@ -61,7 +61,7 @@ public class PlayerHealthBar extends Actor {
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
 
         //Draw bg
-        shapeRenderer.setColor(0,0,0,0.5sf);
+        shapeRenderer.setColor(0,0,0,0.5f);
         shapeRenderer.circle(circleCenterX,circleCenterY,radius);
 
         //Draw health bar + use a gradient to change the colour depending on healthPercentage
