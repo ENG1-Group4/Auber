@@ -16,6 +16,7 @@ import java.lang.Math;
  *
  * @author Robert Watts, Adam Wiegand
  */
+
 public class Player extends Actor {
     public static AuberGame game;
     private final Texture imageDown = new Texture(Gdx.files.internal("img/player.png"));
@@ -26,7 +27,9 @@ public class Player extends Actor {
     private final Texture imageTarget = new Texture(Gdx.files.internal("img/player_target.png"));
     private Texture currentImage = imageDown;
     private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
-
+    private Sound swing = Gdx.audio.newSound(Gdx.files.internal("audio/swing.mp3"));
+    private Sound punch1 = Gdx.audio.newSound(Gdx.files.internal("audio/punch1.mp3"));
+    private Sound punch2 = Gdx.audio.newSound(Gdx.files.internal("audio/punch2.mp3"));
 
     private float playerSpeed = 1.5f;
     private Map map;
@@ -37,7 +40,7 @@ public class Player extends Actor {
 
     public Player(Map map,int x, int y){
         this.map = map;
-        setBounds(map.worldPos(x), map.worldPos(y),20f,20f);
+        setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
     }
 
     @Override
@@ -107,13 +110,19 @@ public class Player extends Actor {
             }else if (currentImage == imageDown) {//attack down
                 yAtt  -= 32;
             }
+
             //do attack
             if (attackDelay == 0){
+                Operative target = null;
                 for (Actor thing : map.InArea(xAtt, yAtt, wAtt, wAtt)) {
                     if (thing instanceof Operative){
-                        Operative target = (Operative) thing;
+                        target = (Operative) thing;
                         target.onHit(this, 20);
+                        punch1.play(0.2f);
                     }
+                }
+                if (target == null) {
+                    swing.play(0.4f);
                 }
                 attackDelay = 61;
                 //display attack
@@ -122,12 +131,13 @@ public class Player extends Actor {
                 //display uncharged attack
                 batch.draw(imageTarget, xAtt, yAtt, wAtt, wAtt);
             }
-            
         }
+
         //attack delay
         if (attackDelay > 0){
             attackDelay -= 1;
         }
+
         //Player Health
         if (map.Effect(2,this)){
             healthTimer += Gdx.graphics.getDeltaTime();
@@ -137,18 +147,20 @@ public class Player extends Actor {
             }
         }
 
-
         //Draw the image
         batch.draw(currentImage, getX() - 6, getY(), currentImage.getWidth(), currentImage.getHeight());
     }
+
     public void onHit(Actor by,int amount) {
         if (by instanceof Operative){
+            punch2.play(0.3f);
             health -= amount;
             if (health <= 0) {
             onDeath();
             }
         }
     }
+
     public void onDeath(){
         map.autoLeave(this);
         game.setScreen(new GameEndScreen(game, false));
@@ -157,4 +169,3 @@ public class Player extends Actor {
         return health;
     }
 }
-

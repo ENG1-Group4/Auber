@@ -24,8 +24,7 @@ public class GameEndScreen extends ScreenAdapter {
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-Pink.png"), 0, 0, 1920, 1080);
     private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
     private SpriteBatch batch = new SpriteBatch();
-    private static Music winMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
-    private static Music lossMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
+    public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
 
     public GameEndScreen (AuberGame game, boolean playerWon){
         this.game = game;
@@ -41,15 +40,15 @@ public class GameEndScreen extends ScreenAdapter {
         table.setFillParent(true);
 
         if(playerWon == true){
-            winMusic.play();
-            winMusic.setVolume(0.05f);
+            menuMusic.play();
+            menuMusic.setVolume(0.05f);
             Texture gameWin = new Texture(Gdx.files.internal("gameWin.png"));
             Image win = new Image(gameWin);
             table.add(win).width(win.getWidth()*2.3f).height(win.getHeight()*2.3f).pad(40).align(Align.center);
             table.row();
         } else {
-            lossMusic.play();
-            lossMusic.setVolume(0.05f);
+            menuMusic.play();
+            menuMusic.setVolume(0.05f);
             Texture gameEnd = new Texture(Gdx.files.internal("gameOver.png"));
             Image end = new Image(gameEnd);
             table.add(end).width(end.getWidth()*2.5f).height(end.getHeight()*2.5f).pad(40).align(Align.center);
@@ -71,10 +70,8 @@ public class GameEndScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                winMusic.stop();
-                lossMusic.stop();
                 menuSelect.play(0.2f);
-                game.setScreen(new TitleScreen(game, false));
+                game.setScreen(new TitleScreen(game, true));
 
             }
         });
@@ -99,6 +96,7 @@ public class GameEndScreen extends ScreenAdapter {
     @Override
     public void dispose () {
         menuSelect.dispose();
+        menuMusic.dispose();
         batch.dispose();
         stage.dispose();
     }

@@ -30,12 +30,11 @@ public class GameScreen extends ScreenAdapter {
     private OrthographicCamera camera;
 
     private HUD HUD;
-    private final float CameraLerp = 2f;
+    private final float CameraLerp = 3f;
     private SpriteBatch batch = new SpriteBatch();
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
-
-
+    
     public GameScreen (AuberGame game){
         this.game = game;
         ambience.play();

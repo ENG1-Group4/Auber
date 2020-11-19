@@ -80,6 +80,7 @@ public class TitleScreen extends ScreenAdapter {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 menuMusic.stop();
+                GameEndScreen.menuMusic.stop();
                 menuSelect.play(0.2f);
                 game.setScreen(new GameScreen(game));
             }
