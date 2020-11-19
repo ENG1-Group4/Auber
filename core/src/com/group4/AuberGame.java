@@ -21,7 +21,7 @@ public class AuberGame extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new GameEndScreen(this, false));
+		setScreen(new TitleScreen(this, false));
 	}
 
 	@Override
