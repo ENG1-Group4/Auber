@@ -97,7 +97,7 @@ public class HUD extends Stage {
         super.draw();
         systemsHealthBar.setCurrentValue(GSystem.systemsRemaining.size());
         operativesHealthBar.setCurrentValue(Operative.remainingOpers);
-
+        this.act();
     }
 
     public void setValues(int numOfOperatives, int numOfSystems){
