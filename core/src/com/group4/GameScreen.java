@@ -122,8 +122,6 @@ public class GameScreen extends ScreenAdapter {
             batch2.begin();
             batch2.draw(mapTexture, 0, 0);
             batch2.end();
-        }else{
-            batch2.dispose();
         }
     }
 
