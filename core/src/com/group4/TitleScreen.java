@@ -37,6 +37,8 @@ public class TitleScreen extends ScreenAdapter {
     public TitleScreen (AuberGame game, boolean isMusicPlaying){
         this.game = game;
         this.isMusicPlaying = isMusicPlaying;
+        Operative.remainingOpers = 0;
+        GSystem.systemsRemaining.clear();
     }
 
     @Override
