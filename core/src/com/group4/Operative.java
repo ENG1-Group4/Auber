@@ -176,6 +176,6 @@ public class Operative extends Actor {
     if (remainingOpers == 0){
       game.setScreen(new GameEndScreen(game, true));
     }
-    hud.successNotification("You killed an operative.");
+    hud.successNotification("You apprehended an operative.");
   }
 }
