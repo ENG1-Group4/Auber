@@ -34,12 +34,11 @@ public class GameScreen extends ScreenAdapter {
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
 
-
     public GameScreen (AuberGame game){
         this.game = game;
         ambience.play();
         ambience.setLooping(true);
-        ambience.setVolume(0.6f);
+        ambience.setVolume(0.7f);
     }
     
     @Override
@@ -59,20 +58,25 @@ public class GameScreen extends ScreenAdapter {
         TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
         map = new Map(tiledMap, Gdx.files.internal("map").readString());
         String[] datas = Gdx.files.internal("mapdata").readString().split("\\r?\\n");
+        //for game end stuff
+        Player.game = game;
+        GSystem.game = game;
+        Operative.game = game;
         //Create the player and add it to the stage
-        player = new Player(map);
+        String[] coords = datas[0].split(",");
+        player = new Player(map,Integer.parseInt(coords[0]),Integer.parseInt(coords[1]));
         stage.addActor(player);
-
+        
         //String[] coords = datas[0].split(",");
         //stage.addActor(new Player(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map));
         //create systems + add them to the stage
         for (String coord : datas[1].split(":")) {
-            String[] coords = coord.split(",");
+            coords = coord.split(",");
             stage.addActor(new GSystem(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map, 1));
         }
         //create operatives + add them to the stage
         for (String coord : datas[2].split(":")) {
-            String[] coords = coord.split(",");
+            coords = coord.split(",");
             stage.addActor(new Operative(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]),map));
         }
 
@@ -109,7 +113,7 @@ public class GameScreen extends ScreenAdapter {
 
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
             ambience.stop();
-            game.setScreen(new TitleScreen(game));
+            game.setScreen(new TitleScreen(game, false));
         }
     }
 
@@ -121,6 +125,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void dispose(){
+        ambience.dispose();
         batch.dispose();
         map.dispose();
         stage.dispose();

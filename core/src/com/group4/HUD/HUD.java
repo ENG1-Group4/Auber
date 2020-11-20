@@ -49,7 +49,7 @@ public class HUD extends Stage {
 
         //Create the system health bar and add it to the stage
         operativesHealthBar = new HealthBar(50, scaledWidth, font, "Operatives Health", Operative.remainingOpers);
-        operativesHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight);
+        operativesHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight + 50);
         this.addActor(operativesHealthBar);
     }
 
