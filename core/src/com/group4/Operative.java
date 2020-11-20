@@ -19,7 +19,7 @@ public class Operative extends Actor {
   private GSystem target;
   private boolean isHacking = false;
   private boolean combat = false;
-  private static int remainingOpers = 0;
+  public static int remainingOpers = 0;
   private int delay = 0;
   public static GridGraph pathfinder;
   private GraphPath<GridNode> currentPath;

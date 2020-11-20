@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.group4.GSystem;
+import com.group4.Operative;
 import com.group4.Player;
 
 /**
@@ -45,6 +46,11 @@ public class HUD extends Stage {
         systemsHealthBar = new HealthBar(50, scaledWidth, font, "System Health", GSystem.systemsRemaining.size());
         systemsHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight);
         this.addActor(systemsHealthBar);
+
+        //Create the system health bar and add it to the stage
+        operativesHealthBar = new HealthBar(50, scaledWidth, font, "Operatives Health", Operative.remainingOpers);
+        operativesHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight);
+        this.addActor(operativesHealthBar);
     }
 
     /**
@@ -81,5 +87,7 @@ public class HUD extends Stage {
     public void draw(){
         super.draw();
         systemsHealthBar.setCurrentValue(GSystem.systemsRemaining.size());
+        systemsHealthBar.setCurrentValue(Operative.remainingOpers);
+
     }
 }
