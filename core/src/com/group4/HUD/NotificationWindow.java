@@ -1,5 +1,7 @@
 package com.group4.HUD;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -28,7 +29,7 @@ public class NotificationWindow extends ScrollPane {
     final int tablePadding = 5;
     final Color bgColour = new Color(0,0,0,0.5f);
     final Color timestampColor = new Color(1,1,1,1);
-
+    private Sound notificationSound = Gdx.audio.newSound(Gdx.files.internal("audio/notification.mp3"));
     /**
      * Construct the class
      *
@@ -65,6 +66,10 @@ public class NotificationWindow extends ScrollPane {
 
     }
 
+    public NotificationWindow(float height, float width) {
+        this(height,width,new BitmapFont());
+    }
+
     /**
      * Add a white notification
      *
@@ -96,7 +101,8 @@ public class NotificationWindow extends ScrollPane {
         table.add(container).center().left().expandX().pad(tablePadding).padBottom(2*tablePadding );
         table.row();
 
-        //Scroll to bottom to display the new messaage
+        //Play sound + scroll to bottom to display the new message
+        notificationSound.play(0.13f);
         this.scrollTo(0, 0, 0, 0);
 
     }
