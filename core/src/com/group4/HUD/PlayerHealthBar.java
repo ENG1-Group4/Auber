@@ -80,7 +80,7 @@ public class PlayerHealthBar extends Actor {
         //Draw the health bar text
         if (setFontScale){
             //Set the scale on the first time through
-            float textScale = ((radius * 0.75f ) - 20) / getTextLayout().width;
+            float textScale = (radius * 0.75f ) / getTextLayout().width;
             font.getData().setScale(textScale);
             setFontScale = false;
         }
