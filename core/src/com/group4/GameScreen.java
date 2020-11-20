@@ -36,8 +36,10 @@ public class GameScreen extends ScreenAdapter {
     private com.group4.HUD.HUD HUD;
     private final float CameraLerp = 2f;
     private SpriteBatch batch = new SpriteBatch();
+    private SpriteBatch batch2 = new SpriteBatch();
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
+    private TextureRegion mapTexture = new TextureRegion(new Texture("mapScreen.png"), 0, 0, 1920, 1080);
     private TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
     JSONObject obj = new JSONObject(Gdx.files.internal("mapdata.json").readString());
 
@@ -135,6 +137,12 @@ public class GameScreen extends ScreenAdapter {
             ambience.stop();
             game.setScreen(new TitleScreen(game, false));
         }
+
+        if (Gdx.input.isKeyPressed(Keys.M)){
+            batch2.begin();
+            batch2.draw(mapTexture, 0, 0);
+            batch2.end();
+        }
     }
 
     @Override
@@ -147,6 +155,7 @@ public class GameScreen extends ScreenAdapter {
     public void dispose(){
         ambience.dispose();
         batch.dispose();
+        batch2.dispose();
         map.dispose();
         stage.dispose();
     }
