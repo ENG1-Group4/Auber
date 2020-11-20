@@ -66,7 +66,12 @@ public class GameScreen extends ScreenAdapter {
         String[] coords = datas[0].split(",");
         player = new Player(map,Integer.parseInt(coords[0]),Integer.parseInt(coords[1]));
         stage.addActor(player);
-        
+
+        //Create the Heads up display
+        HUD = new HUD(player);
+        Gdx.input.setInputProcessor(HUD);
+        HUD.infoNotification("System Log started...");
+
         //String[] coords = datas[0].split(",");
         //stage.addActor(new Player(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map));
         //create systems + add them to the stage
@@ -77,13 +82,9 @@ public class GameScreen extends ScreenAdapter {
         //create operatives + add them to the stage
         for (String coord : datas[2].split(":")) {
             coords = coord.split(",");
-            stage.addActor(new Operative(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]),map));
+            stage.addActor(new Operative(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]),map, this.HUD));
         }
 
-        //Create the Heads up display
-        HUD = new HUD(player);
-        Gdx.input.setInputProcessor(HUD);
-        HUD.infoNotification("System Log started...");
     }
 
     @Override
