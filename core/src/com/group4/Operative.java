@@ -21,7 +21,6 @@ public class Operative extends Actor {
   private Map map;
   private int health = 100;
   private GSystem target;
-  private static int remainingOpers = 0;
   private boolean isHacking = false;
   private boolean combat = false;
   public static int remainingOpers = 0;
