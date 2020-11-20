@@ -24,6 +24,7 @@ public class Operative extends Actor {
   private static int remainingOpers = 0;
   private boolean isHacking = false;
   private boolean combat = false;
+  public static int remainingOpers = 0;
   private static ArrayList<GSystem> untargetedSystems = new ArrayList<GSystem>();;
   private int delay = 0;
   public static GridGraph pathfinder;

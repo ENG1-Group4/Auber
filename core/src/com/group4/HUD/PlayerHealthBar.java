@@ -1,4 +1,4 @@
-package com.group4;
+package com.group4.HUD;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,18 +8,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.group4.Player;
 
 /**
  * Draws the health bar of the game
  *
  * @author Robert Watts
  */
-public class HealthBar extends Actor {
+public class PlayerHealthBar extends Actor {
 
     final private ShapeRenderer shapeRenderer = new ShapeRenderer();
     float size;
     Player player;
-    BitmapFont font = new BitmapFont();
+    BitmapFont font;
     Boolean setFontScale = true;
 
     /**
@@ -27,12 +28,22 @@ public class HealthBar extends Actor {
      * @param player the player
      * @param size the size of the circle
      */
-    public HealthBar(Player player,float size){
+    public PlayerHealthBar(Player player, float size){
+        this(player, size, new BitmapFont());
+    }
+
+    /**
+     *
+     * @param player the player
+     * @param size the size of the circle
+     * @param font the font of the text
+     */
+    public PlayerHealthBar(Player player, float size, BitmapFont font){
+        this.font = font;
         this.size = size;
         this.player = player;
         shapeRenderer.setAutoShapeType(true);
     }
-
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -50,7 +61,7 @@ public class HealthBar extends Actor {
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
 
         //Draw bg
-        shapeRenderer.setColor(0,0,0,0.4f);
+        shapeRenderer.setColor(0,0,0,0.5f);
         shapeRenderer.circle(circleCenterX,circleCenterY,radius);
 
         //Draw health bar + use a gradient to change the colour depending on healthPercentage
@@ -78,6 +89,10 @@ public class HealthBar extends Actor {
         font.draw(batch, getTextLayout(), circleCenterX - (getTextLayout().width )  / 2, circleCenterY + (font.getXHeight())/2);
     }
 
+    /**
+     * Get the label text layout
+     * @return GlyphLayout for use in a label
+     */
     private GlyphLayout getTextLayout(){
         return new GlyphLayout(font, String.valueOf(player.getHealth()));
     }
