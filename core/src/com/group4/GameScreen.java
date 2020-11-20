@@ -2,11 +2,14 @@ package com.group4;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
@@ -15,6 +18,8 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.group4.HUD.HUD;
+import org.json.*;
+
 
 /**
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
@@ -33,6 +38,8 @@ public class GameScreen extends ScreenAdapter {
     private SpriteBatch batch = new SpriteBatch();
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
+    private TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
+    JSONObject obj = new JSONObject(Gdx.files.internal("mapdata.json").readString());
 
     public GameScreen (AuberGame game){
         this.game = game;
@@ -55,7 +62,6 @@ public class GameScreen extends ScreenAdapter {
 
 
         //Load the map and create it
-        TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
         map = new Map(tiledMap, Gdx.files.internal("map").readString());
         String[] datas = Gdx.files.internal("mapdata").readString().split("\\r?\\n");
         //for game end stuff
@@ -64,7 +70,10 @@ public class GameScreen extends ScreenAdapter {
         Operative.game = game;
         //Create the player and add it to the stage
         String[] coords = datas[0].split(",");
-        player = new Player(map,Integer.parseInt(coords[0]),Integer.parseInt(coords[1]));
+        player = new Player(map,obj.getJSONArray("playerStartCoords").getInt(0),obj.getJSONArray("playerStartCoords").getInt(1));
+
+
+
         stage.addActor(player);
 
         //Create the Heads up display
@@ -75,14 +84,23 @@ public class GameScreen extends ScreenAdapter {
         //String[] coords = datas[0].split(",");
         //stage.addActor(new Player(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map));
         //create systems + add them to the stage
-        for (String coord : datas[1].split(":")) {
-            coords = coord.split(",");
-            stage.addActor(new GSystem(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map, 1));
+        for (int i = 0; i < obj.getJSONArray("rooms").length(); i++) {
+            stage.addActor(new GSystem(
+                    obj.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(0),
+                    obj.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(1),
+                    map,
+                    this.HUD,
+                    obj.getJSONArray("rooms").getJSONObject(i).getString("name")));
         }
         //create operatives + add them to the stage
-        for (String coord : datas[2].split(":")) {
-            coords = coord.split(",");
-            stage.addActor(new Operative(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]),map, this.HUD));
+        for (int i = 0; i < obj.getJSONArray("operativeStartCoords").length(); i++) {
+            stage.addActor(
+                    new Operative(
+                            obj.getJSONArray("operativeStartCoords").getJSONArray(i).getInt(0),
+                            obj.getJSONArray("operativeStartCoords").getJSONArray(i).getInt(1),
+                            map,
+                            this.HUD
+                        ));
         }
 
         HUD.setValues(Operative.remainingOpers,GSystem.systemsRemaining.size());
@@ -132,4 +150,6 @@ public class GameScreen extends ScreenAdapter {
         map.dispose();
         stage.dispose();
     }
+
+
 }

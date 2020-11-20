@@ -76,6 +76,16 @@ public class HUD extends Stage {
      *
      * @param text the notification
      */
+    public void warningNotification(String text){
+        notificationWindow.addNotification(text, new Color(1,0.647f,0,1));
+    }
+
+
+    /**
+     * Add a error notification
+     *
+     * @param text the notification
+     */
     public void errorNotification(String text){
         notificationWindow.addNotification(text, new Color(1,0,0,1));
     }
