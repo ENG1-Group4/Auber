@@ -50,10 +50,10 @@ public class GSystem extends Actor {
             }
 
             if (currentNotification == 0){
-                hud.infoNotification("The system in " + roomName + " is being attacked.");
+                hud.infoNotification("The system in the " + roomName + " is being attacked.");
                 currentNotification += 1;
             } else if (currentNotification == 1 && health <= 50){
-                hud.warningNotification("The system in " + roomName + " is down to 50% health.");
+                hud.warningNotification("The system in the " + roomName + " is down to 50% health.");
                 currentNotification += 1;
             }
         }
