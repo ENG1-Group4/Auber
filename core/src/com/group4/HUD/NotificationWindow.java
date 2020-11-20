@@ -65,6 +65,10 @@ public class NotificationWindow extends ScrollPane {
 
     }
 
+    public NotificationWindow(float height, float width) {
+        this(height,width,new BitmapFont());
+    }
+
     /**
      * Add a white notification
      *

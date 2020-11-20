@@ -25,7 +25,6 @@ public class HUD extends Stage {
     final private float notificationWindowWidthScale = 3/8f;
     final private float xOffset = 10;
     final private float yOffset = 10;
-    final private BitmapFont font = new BitmapFont();
 
     public HUD(Player player){
         this.player = player;
@@ -33,22 +32,22 @@ public class HUD extends Stage {
         float scaledWidth = Gdx.graphics.getWidth() * notificationWindowWidthScale;
 
         //Create the health bar and add it to the stage
-        playerHealthBar = new PlayerHealthBar(player,scaledHeight/2, font);
+        playerHealthBar = new PlayerHealthBar(player,scaledHeight/2);
         playerHealthBar.setPosition(xOffset,yOffset);
         this.addActor(playerHealthBar);
 
         //Create the notification window and add it to the stage
-        notificationWindow = new NotificationWindow(scaledHeight, scaledWidth, font);
+        notificationWindow = new NotificationWindow(scaledHeight, scaledWidth);
         notificationWindow.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset);
         this.addActor(notificationWindow);
 
         //Create the system health bar and add it to the stage
-        systemsHealthBar = new HealthBar(50, scaledWidth, font, "System Health", GSystem.systemsRemaining.size());
+        systemsHealthBar = new HealthBar(50, scaledWidth, "System Health", GSystem.systemsRemaining.size());
         systemsHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight);
         this.addActor(systemsHealthBar);
 
         //Create the system health bar and add it to the stage
-        operativesHealthBar = new HealthBar(50, scaledWidth, font, "Operatives Health", Operative.remainingOpers);
+        operativesHealthBar = new HealthBar(50, scaledWidth, "Operatives Health", Operative.remainingOpers);
         operativesHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight + 50);
         this.addActor(operativesHealthBar);
     }

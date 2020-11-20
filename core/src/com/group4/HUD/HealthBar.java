@@ -34,7 +34,7 @@ public class HealthBar extends Actor {
      * @param title the title used
      * @param startValue the start value
      */
-    public HealthBar(float height, float width, BitmapFont font, String title, int startValue){
+    public HealthBar(float height, float width, String title, int startValue, BitmapFont font){
         this.startValue = startValue;
         this.currentValue = startValue;
         this.font = font;
@@ -44,12 +44,18 @@ public class HealthBar extends Actor {
         shapeRenderer.setAutoShapeType(true);
     }
 
-    /**
-     * Draw the class
-     *
-     * @param batch
-     * @param parentAlpha
-     */
+
+    public HealthBar(float height, float width, String title, int startValue){
+        this(height,width,title,startValue,new BitmapFont());
+    }
+
+
+        /**
+         * Draw the class
+         *
+         * @param batch
+         * @param parentAlpha
+         */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         //Allow colours to blend
