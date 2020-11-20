@@ -102,5 +102,13 @@ public class HealthBar extends Actor {
         return new GlyphLayout(font, String.valueOf(title + ": " + currentValue + "/" + startValue));
     }
 
+    /**
+     * Set the max value of the health
+     * @param maxValue
+     */
+    public void setMaxValue(int maxValue) {
+        this.startValue = maxValue;
+    }
+
 
 }

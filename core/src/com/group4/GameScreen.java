@@ -85,6 +85,7 @@ public class GameScreen extends ScreenAdapter {
             stage.addActor(new Operative(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]),map, this.HUD));
         }
 
+        HUD.setValues(Operative.remainingOpers,GSystem.systemsRemaining.size());
     }
 
     @Override
