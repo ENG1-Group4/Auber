@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.audio.Sound;
+import com.group4.HUD.HUD;
 import com.group4.operAi.GridGraph;
 import com.group4.operAi.GridNode;
 import java.lang.Math;
@@ -30,9 +31,11 @@ public class Operative extends Actor {
   private GraphPath<GridNode> currentPath;
   private int nodeNum;
   private Sound metalDeath = Gdx.audio.newSound(Gdx.files.internal("audio/metalDeath.mp3"));
+  private HUD hud;
 
-  public Operative(int x, int y,Map map) {
+  public Operative(int x, int y,Map map, HUD hud) {
     this.map = map;
+    this.hud = hud;
     remainingOpers += 1;
     setBounds(map.worldPos(x), map.worldPos(y),20f,20f);
     if (pathfinder == null){pathfinder = new GridGraph(map,x,y);}
@@ -75,7 +78,7 @@ public class Operative extends Actor {
       for (Actor thing : map.InArea(getX() - offset,getY() - offset,31,31)) {
         if (thing instanceof Player && delay == 0){
           player = (Player) thing;
-          player.onHit(this,20);
+          player.onHit(this,15);
           batch.draw(imageAttack,getX() - offset,getY() - offset,32,32);
           delay = 60;
           break;//only one player
@@ -173,5 +176,6 @@ public class Operative extends Actor {
     if (remainingOpers == 0){
       game.setScreen(new GameEndScreen(game, true));
     }
+    hud.successNotification("You apprehended an operative.");
   }
 }
