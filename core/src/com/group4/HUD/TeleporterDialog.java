@@ -1,6 +1,7 @@
 package com.group4.HUD;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -22,6 +23,7 @@ public class TeleporterDialog extends Dialog {
     private HUD hud;
     private ArrayList<int[]> teleporterPositions = new ArrayList<int[]>();
     private final float fadeTime = 0.2f;
+    private Sound teleporterSounds = Gdx.audio.newSound(Gdx.files.internal("audio/teleporter.mp3"));
 
     /**
      *
@@ -98,6 +100,7 @@ public class TeleporterDialog extends Dialog {
         //Move the player to the center of the new teleporter
         JSONArray coords = (JSONArray) object;
         float teleporterOffset = teleporterSize / 2;
+        teleporterSounds.play(0.13f);
         player.setPosition(player.map.worldPos(coords.getInt(0) + teleporterOffset -0.125f),
                 player.map.worldPos(coords.getInt(1) + teleporterOffset - 0.25f));
 
