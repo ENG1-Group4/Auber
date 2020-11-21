@@ -83,12 +83,14 @@ public class GameScreen extends ScreenAdapter {
         //create systems + add them to the stage
 
         for (int i = 0; i < gameData.getJSONArray("rooms").length(); i++) {
-            stage.addActor(new GSystem(
-                    gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(0),
-                    gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(1),
-                    map,
-                    this.HUD,
-                    gameData.getJSONArray("rooms").getJSONObject(i).getString("name")));
+            if (!gameData.getJSONArray("rooms").getJSONObject(i).isNull("systemCoords")) {
+                stage.addActor(new GSystem(
+                        gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(0),
+                        gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(1),
+                        map,
+                        this.HUD,
+                        gameData.getJSONArray("rooms").getJSONObject(i).getString("name")));
+            }
         }
 
         //create operatives + add them to the stage

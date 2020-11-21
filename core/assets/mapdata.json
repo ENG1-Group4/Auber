@@ -12,6 +12,11 @@
   ],
   "rooms" : [
     {
+      "name":"Rec Room",
+      "systemCoords": null,
+      "teleporterCoords": [33,37]
+    },
+    {
       "name":"Storage Room",
       "systemCoords": [16,6],
       "teleporterCoords": null
@@ -52,7 +57,7 @@
       "teleporterCoords": null
     },
     {
-      "name":"Med Bay",
+      "name":"Medbay",
       "systemCoords": [18,33],
       "teleporterCoords": [19,32]
     },
