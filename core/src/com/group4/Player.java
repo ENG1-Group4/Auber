@@ -32,7 +32,7 @@ public class Player extends Actor {
     private Sound punch2 = Gdx.audio.newSound(Gdx.files.internal("audio/punch2.mp3"));
 
     private float playerSpeed = 1.5f;
-    private Map map;
+    public Map map;
     private int health = 100;
     private float healthTimer = 0;
     private long audioStart = 0;
@@ -149,6 +149,16 @@ public class Player extends Actor {
 
         //Draw the image
         batch.draw(currentImage, getX() - 6, getY(), currentImage.getWidth(), currentImage.getHeight());
+    }
+
+    @Override
+    public float getHeight(){
+        return currentImage.getHeight();
+    }
+
+    @Override
+    public float getWidth(){
+        return currentImage.getWidth();
     }
 
     public void onHit(Actor by,int amount) {

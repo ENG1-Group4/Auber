@@ -1,13 +1,14 @@
 package com.group4.HUD;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.group4.GSystem;
 import com.group4.Operative;
 import com.group4.Player;
+import org.json.JSONObject;
 
 /**
  * Creates and loads the heads up display
@@ -21,12 +22,13 @@ public class HUD extends Stage {
     Player player;
     PlayerHealthBar playerHealthBar;
     NotificationWindow notificationWindow;
+    TeleporterDialog teleporterDialog;
     final private float heightScale = 1/7f;
     final private float notificationWindowWidthScale = 3/8f;
     final private float xOffset = 10;
     final private float yOffset = 10;
 
-    public HUD(Player player){
+    public HUD(Player player, JSONObject gameData){
         this.player = player;
         float scaledHeight = Gdx.graphics.getHeight() * heightScale;
         float scaledWidth = Gdx.graphics.getWidth() * notificationWindowWidthScale;
@@ -50,6 +52,22 @@ public class HUD extends Stage {
         operativesHealthBar = new HealthBar(50, scaledWidth, "Operatives Health", Operative.remainingOpers);
         operativesHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight + 50);
         this.addActor(operativesHealthBar);
+
+        //Create the teleporter and the event listener
+        teleporterDialog = new TeleporterDialog(gameData, player, this,2);
+        addListener(new InputListener()
+        {
+            @Override
+            public boolean keyTyped(InputEvent event, char key)
+            {
+                //if the letter to is typed the show the teleporter dialouge
+                if(key == 't'){
+                    teleporterDialog.show(getStage());
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -79,6 +97,15 @@ public class HUD extends Stage {
         notificationWindow.addNotification(text, new Color(1,0.647f,0,1));
     }
 
+    /**
+     * Add a game notification
+     *
+     * @param text the notification
+     */
+    public void gameNotification(String text){
+        notificationWindow.addNotification(text, new Color(1,1,0,1));
+    }
+
 
     /**
      * Add a error notification
@@ -98,10 +125,30 @@ public class HUD extends Stage {
         systemsHealthBar.setCurrentValue(GSystem.systemsRemaining.size());
         operativesHealthBar.setCurrentValue(Operative.remainingOpers);
         this.act();
+
+        //If the player moves off a teleporter pad hide the dialogue
+        if (!teleporterDialog.isPlayerTouchingTeleporter()){
+            teleporterDialog.hide();
+        }
+
     }
 
+    /**
+     * Set the start values of the operatives & system's
+     * @param numOfOperatives int number of operatives
+     * @param numOfSystems int number of systems
+     */
     public void setValues(int numOfOperatives, int numOfSystems){
         operativesHealthBar.setMaxValue(numOfOperatives);
         systemsHealthBar.setMaxValue(numOfSystems);
+    }
+
+    /**
+     * Gets this stage
+     *
+     * @return returns the value of this
+     */
+    private Stage getStage(){
+        return this;
     }
 }
