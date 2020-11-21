@@ -2,14 +2,11 @@ package com.group4;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
@@ -39,7 +36,7 @@ public class GameScreen extends ScreenAdapter {
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
     private TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
-    JSONObject obj = new JSONObject(Gdx.files.internal("mapdata.json").readString());
+    JSONObject gameData = new JSONObject(Gdx.files.internal("mapdata.json").readString());
 
     public GameScreen (AuberGame game){
         this.game = game;
@@ -70,34 +67,36 @@ public class GameScreen extends ScreenAdapter {
         Operative.game = game;
         //Create the player and add it to the stage
         String[] coords = datas[0].split(",");
-        player = new Player(map,obj.getJSONArray("playerStartCoords").getInt(0),obj.getJSONArray("playerStartCoords").getInt(1));
+        player = new Player(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1));
 
 
 
         stage.addActor(player);
 
         //Create the Heads up display
-        HUD = new HUD(player);
+        HUD = new HUD(player, gameData);
         Gdx.input.setInputProcessor(HUD);
         HUD.infoNotification("System Log started...");
 
         //String[] coords = datas[0].split(",");
         //stage.addActor(new Player(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map));
         //create systems + add them to the stage
-        for (int i = 0; i < obj.getJSONArray("rooms").length(); i++) {
+
+        for (int i = 0; i < gameData.getJSONArray("rooms").length(); i++) {
             stage.addActor(new GSystem(
-                    obj.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(0),
-                    obj.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(1),
+                    gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(0),
+                    gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(1),
                     map,
                     this.HUD,
-                    obj.getJSONArray("rooms").getJSONObject(i).getString("name")));
+                    gameData.getJSONArray("rooms").getJSONObject(i).getString("name")));
         }
+
         //create operatives + add them to the stage
-        for (int i = 0; i < obj.getJSONArray("operativeStartCoords").length(); i++) {
+        for (int i = 0; i < gameData.getJSONArray("operativeStartCoords").length(); i++) {
             stage.addActor(
                     new Operative(
-                            obj.getJSONArray("operativeStartCoords").getJSONArray(i).getInt(0),
-                            obj.getJSONArray("operativeStartCoords").getJSONArray(i).getInt(1),
+                            gameData.getJSONArray("operativeStartCoords").getJSONArray(i).getInt(0),
+                            gameData.getJSONArray("operativeStartCoords").getJSONArray(i).getInt(1),
                             map,
                             this.HUD
                         ));
@@ -149,6 +148,7 @@ public class GameScreen extends ScreenAdapter {
         batch.dispose();
         map.dispose();
         stage.dispose();
+        HUD.dispose();
     }
 
 

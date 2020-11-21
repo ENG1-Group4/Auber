@@ -251,9 +251,9 @@ public class Map extends OrthogonalTiledMapRenderer {
      * Converts a world position into a grid position
      *
      * @param gridPos the coordinate relative to the map
-     * @return An integer of the grid coordinate relative to the world
+     * @return An a float of the grid coordinate relative to the world
      */
-    public int worldPos(int gridPos){
+    public float worldPos(float gridPos){
         return gridPos*properties.get("tilewidth", Integer.class);
     }
 
