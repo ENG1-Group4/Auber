@@ -25,7 +25,7 @@ public class Instructions extends ScreenAdapter {
     private Stage stage;
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
     private SpriteBatch batch = new SpriteBatch();
-    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
+    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
 
     public Instructions (AuberGame game){
         this.game = game;
@@ -41,20 +41,20 @@ public class Instructions extends ScreenAdapter {
         table.top();
         table.setFillParent(true);
 
-        Texture logoTexture = new Texture(Gdx.files.internal("menu/auberLogo.png"));
+        Texture logoTexture = new Texture(Gdx.files.internal("img/menu/auberLogo.png"));
         Image logo = new Image(logoTexture);
         table.add(logo).width(914.9f).height(270.9f).pad(20).align(Align.top);
         table.row();
 
-        Texture instructionsTexture = new Texture(Gdx.files.internal("menu/instructions.png"));
+        Texture instructionsTexture = new Texture(Gdx.files.internal("img/menu/instructions.png"));
         Image instructions = new Image(instructionsTexture);
         table.add(instructions).align(Align.top);
         table.row();
 
         ImageButton.ImageButtonStyle backStyle =  new ImageButton.ImageButtonStyle();
-        backStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/backButtonInactive.png"))));
-        backStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/backButtonActive.png"))));
-        backStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/backButtonActive.png"))));
+        backStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/backButtonInactive.png"))));
+        backStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/backButtonActive.png"))));
+        backStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/backButtonActive.png"))));
         ImageButton backButton = new ImageButton(backStyle);
         backButton.setPosition(20,20);
 

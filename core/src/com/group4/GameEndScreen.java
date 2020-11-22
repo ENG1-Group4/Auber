@@ -22,7 +22,7 @@ public class GameEndScreen extends ScreenAdapter {
     private boolean playerWon;
     private Stage stage;
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
-    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
+    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
     private SpriteBatch batch = new SpriteBatch();
     public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
 
@@ -58,9 +58,9 @@ public class GameEndScreen extends ScreenAdapter {
         }
 
         ImageButton.ImageButtonStyle menuStyle =  new ImageButton.ImageButtonStyle();
-        menuStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/menuButtonInactive.png"))));
-        menuStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/menuButtonActive.png"))));
-        menuStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/menuButtonActive.png"))));
+        menuStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/menuButtonInactive.png"))));
+        menuStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/menuButtonActive.png"))));
+        menuStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/menuButtonActive.png"))));
         ImageButton menuButton = new ImageButton(menuStyle);
         table.add(menuButton).pad(30).align(Align.center);
 

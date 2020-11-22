@@ -30,7 +30,7 @@ public class TitleScreen extends ScreenAdapter {
     private Stage stage;
     private TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
     private SpriteBatch batch = new SpriteBatch();
-    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
+    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
     public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
     private boolean isMusicPlaying;
 
@@ -59,16 +59,16 @@ public class TitleScreen extends ScreenAdapter {
         table.setFillParent(true);
 
         //Create the logo and add it to the table
-        Texture logoTexture = new Texture(Gdx.files.internal("menu/auberLogo.png"));
+        Texture logoTexture = new Texture(Gdx.files.internal("img/menu/auberLogo.png"));
         Image logo = new Image(logoTexture);
         table.add(logo).pad(10).fillY().align(Align.center);
         table.row();
 
         //Create the start game button, add it to the table with its click event
         ImageButton.ImageButtonStyle playStyle =  new ImageButton.ImageButtonStyle();
-        playStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonInactive.png"))));
-        playStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonActive.png"))));
-        playStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonActive.png"))));
+        playStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/playButtonInactive.png"))));
+        playStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/playButtonActive.png"))));
+        playStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/playButtonActive.png"))));
         ImageButton playButton = new ImageButton(playStyle);
         table.add(playButton).center().pad(5);
         table.row();
@@ -90,9 +90,9 @@ public class TitleScreen extends ScreenAdapter {
 
         //Create the instructions button, add it to the table with its click event
         ImageButton.ImageButtonStyle instructionsStyle =  new ImageButton.ImageButtonStyle();
-        instructionsStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonInactive.png"))));
-        instructionsStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonActive.png"))));
-        instructionsStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonActive.png"))));
+        instructionsStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/instructionsButtonInactive.png"))));
+        instructionsStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/instructionsButtonActive.png"))));
+        instructionsStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/instructionsButtonActive.png"))));
         ImageButton instructionsButton = new ImageButton(instructionsStyle);
         table.add(instructionsButton).center().pad(5);
         table.row();
@@ -112,9 +112,9 @@ public class TitleScreen extends ScreenAdapter {
 
         //Create the quit game button, add it to the table with its click event
         ImageButton.ImageButtonStyle quitStyle =  new ImageButton.ImageButtonStyle();
-        quitStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonInactive.png"))));
-        quitStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonActive.png"))));
-        quitStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonActive.png"))));
+        quitStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/quitButtonInactive.png"))));
+        quitStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/quitButtonActive.png"))));
+        quitStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/quitButtonActive.png"))));
         ImageButton quitButton = new ImageButton(quitStyle);
         table.add(quitButton).center().pad(5);
         table.row();
