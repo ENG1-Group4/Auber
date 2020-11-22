@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  * alongside an implementation of {@link com.badlogic.gdx.Game} for use.
  *
  * @author Robert Watts
+ * @author Bogdan Bodnariu-Lescinschi
  */
 public class AuberGame extends Game {
 

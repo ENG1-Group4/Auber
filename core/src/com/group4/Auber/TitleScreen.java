@@ -23,17 +23,41 @@ import com.badlogic.gdx.Input.Keys;
  * TitleScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the title screen.
  *
  * @author Robert Watts
+ * @author Bogdan Bodnariu-Lescinschi
  */
 public class TitleScreen extends ScreenAdapter {
 
     public AuberGame game;
     private Stage stage;
-    private TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
-    private SpriteBatch batch = new SpriteBatch();
-    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
-    public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
-    private boolean isMusicPlaying;
+    private final SpriteBatch batch = new SpriteBatch();
 
+    /**
+     * A flag to see if there is music playing from a previous screen
+     */
+    private final boolean isMusicPlaying;
+
+    /**
+     * The background music for the menu
+     */
+    public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
+
+
+    /**
+     * Load the background image
+     */
+    private final TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
+
+    /**
+     * The sound made when the user selects a button
+     */
+    private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
+
+
+    /**
+     * Create the the title screen screen.
+     * @param game the AuberGame instance
+     * @param isMusicPlaying whether their is music currently playing
+     */
     public TitleScreen (AuberGame game, boolean isMusicPlaying){
         this.game = game;
         this.isMusicPlaying = isMusicPlaying;
@@ -44,7 +68,7 @@ public class TitleScreen extends ScreenAdapter {
     @Override
     public void show() {
 
-        if(isMusicPlaying == false){
+        if(!isMusicPlaying){
             menuMusic.play();
             menuMusic.setVolume(0.1f);
             menuMusic.setLooping(true);
@@ -81,6 +105,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                //Stop the music playing and change the screen to the game screen
                 menuMusic.stop();
                 GameEndScreen.menuMusic.stop();
                 menuSelect.play(0.2f);
@@ -140,11 +165,11 @@ public class TitleScreen extends ScreenAdapter {
         //Set the background colour & draw the stage
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
+
+        //Draw the batch and stage
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
         batch.end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 

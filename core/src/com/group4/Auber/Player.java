@@ -14,30 +14,62 @@ import java.lang.Math;
  * Handles key presses for play moment, as wll as drawing the player each frame.
  * The key press are polled rather than using events so that the player can move diagonally.
  *
- * @author Robert Watts, Adam Wiegand
+ * @author Robert Watts
+ * @author Adam Wiegand
+ * @author Bogdan Bodnariu-Lescinschi
  */
 
 public class Player extends Actor {
     public static AuberGame game;
+    public MapRenderer map;
+
+    //The images of the player looking in diffrent directions
     private final Texture imageDown = new Texture(Gdx.files.internal("img/player.png"));
     private final Texture imageUp = new Texture(Gdx.files.internal("img/player_up.png"));
     private final Texture imageLeft = new Texture(Gdx.files.internal("img/player_left.png"));
     private final Texture imageRight = new Texture(Gdx.files.internal("img/player_right.png"));
-    private final Texture imageAttack = new Texture(Gdx.files.internal("img/player_attack.png"));
+    private final Texture imageAttack = new Texture(Gdx.files.internal("img/player_attack.png")); //assumed to be square
     private final Texture imageTarget = new Texture(Gdx.files.internal("img/player_target.png"));
     private Texture currentImage = imageDown;
+
+    //Diffrent sound effects for diffrent conditions
     private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
     private Sound swing = Gdx.audio.newSound(Gdx.files.internal("audio/swing.mp3"));
     private Sound punch1 = Gdx.audio.newSound(Gdx.files.internal("audio/punch1.mp3"));
     private Sound punch2 = Gdx.audio.newSound(Gdx.files.internal("audio/punch2.mp3"));
 
+    /**
+     * The speed multiplier at which the player moves
+     */
     private float playerSpeed = 1.5f;
-    public MapRenderer map;
+
+    /**
+     * The health of the player
+     */
     private int health = 100;
+
+    /**
+     * The health timer. This is used when the player is in the medbay to add 1 health on 0.01 seconds
+     */
     private float healthTimer = 0;
-    private long audioStart = 0;
+
+    /**
+     * Used as a timer so that the fotsteps sound is played evey 0.32 seconds
+     */
+    private long audioStartTimer = 0;
+
+    /**
+     * The attack delay
+     */
     private int attackDelay = 0;
 
+    /**
+     * Create the player
+     *
+     * @param map the map
+     * @param x the starting X coordinate
+     * @param y the starting Y coordinate
+     */
     public Player(MapRenderer map, int x, int y){
         this.map = map;
         setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
@@ -61,6 +93,7 @@ public class Player extends Actor {
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             deltaX += playerSpeed;
         }
+
         //Check the space is empty before moving into it
         map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
         if (map.Empty(getX() + deltaX, getY(), getWidth(), getHeight())){
@@ -70,13 +103,14 @@ public class Player extends Actor {
             moveBy(0, deltaY);
         }
         map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
+
         //See if the player has moved
         if (Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0){
             
             //Sets the footstep sound effect to play at 0.32 sec intervals when the player is moving
-            if (TimeUtils.timeSinceNanos(audioStart) > 320000000) {
+            if (TimeUtils.timeSinceNanos(audioStartTimer) > 320000000) {
                 step.play(0.3f);
-                audioStart = TimeUtils.nanoTime();
+                audioStartTimer = TimeUtils.nanoTime();
             }
 
             //Change the image
@@ -96,22 +130,30 @@ public class Player extends Actor {
 
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){//attack
+        //If the space bar is down attack
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             float xAtt = getX() - 12f;
             float yAtt = getY() - 6f;
-            float wAtt = imageAttack.getWidth();//assuming square
-            //attack direction
-            if(currentImage == imageRight){//attack right
+
+            //assuming the imageAttack square so just get the width
+            float wAtt = imageAttack.getWidth();
+
+            //What direction to attack in?
+            if(currentImage == imageRight){
+                //attack right
                 xAtt += 32;
-            }else if (currentImage == imageLeft) { //attack left
+            }else if (currentImage == imageLeft) {
+                //attack left
                 xAtt -= 32;
-            }else if(currentImage == imageUp){//attack up
+            }else if(currentImage == imageUp){
+                //attack up
                 yAtt  += 32;
-            }else if (currentImage == imageDown) {//attack down
+            }else if (currentImage == imageDown) {
+                //attack down
                 yAtt  -= 32;
             }
 
-            //do attack
+            //do the attack
             if (attackDelay == 0){
                 Operative target = null;
                 for (Actor thing : map.InArea(xAtt, yAtt, wAtt, wAtt)) {
@@ -147,7 +189,7 @@ public class Player extends Actor {
             }
         }
 
-        //Draw the image
+        //Draw the player image
         batch.draw(currentImage, getX() - 6, getY(), currentImage.getWidth(), currentImage.getHeight());
     }
 
@@ -161,9 +203,18 @@ public class Player extends Actor {
         return currentImage.getWidth();
     }
 
+    /**
+     * The player has been attacked so decreases the health
+     *
+     * @param by the actor that attacked the player
+     * @param amount the amount to reduce the health by
+     */
     public void onHit(Actor by,int amount) {
+        //See if it was the operative that attacked
         if (by instanceof Operative){
             punch2.play(0.30f);
+
+            //Reduce the health if the player, and make sure the operative is not dead
             health -= amount;
             if (health <= 0) {
             onDeath();
@@ -171,10 +222,18 @@ public class Player extends Actor {
         }
     }
 
+    /**
+     * Called when the player dies
+     */
     public void onDeath(){
         map.autoLeave(this);
         game.setScreen(new GameEndScreen(game, false));
-      }
+    }
+
+    /**
+     * Get the current health of the player
+     * @return the current player heath
+     */
     public int getHealth(){
         return health;
     }

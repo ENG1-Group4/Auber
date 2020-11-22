@@ -90,7 +90,7 @@ public class GridNode {
     /**
      * Get a set of connection positions.
      *
-     * @param antiSquareness how not on a grid the AI will move (higher = less = more intensive). This must be <= 1.
+     * @param antiSquareness how not on a grid the AI will move (higher = less = more intensive). This must be less than or equal to 1.
      * @return A set of positions
      */
     private Set<Pos> _ConnectingCoords(int antiSquareness){
