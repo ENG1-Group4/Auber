@@ -11,22 +11,22 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
  * Draws a rectangular health bar with black background. The start value is 100% with the current value
- * being the value that falls
+ * being the value that changes as the health changes.
  *
  * @author Robert Watts
  */
 public class HealthBar extends Actor {
     final private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    float width;
-    float height;
-    String title;
-    BitmapFont font;
-    final float barMargin = 10;
-    int startValue;
-    int currentValue;
+    protected float width;
+    protected float height;
+    protected String title;
+    protected BitmapFont font;
+    protected final float barMargin = 10;
+    protected int startValue;
+    protected int currentValue;
 
     /**
-     * Construct the class, and save the inital variables
+     * Construct the class, and save the initial variables
      *
      * @param height the height of the bar
      * @param width the width of the bar

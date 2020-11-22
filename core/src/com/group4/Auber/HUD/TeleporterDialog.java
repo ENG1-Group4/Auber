@@ -1,11 +1,11 @@
-package com.group4.HUD;
+package com.group4.Auber.HUD;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.group4.Player;
+import com.group4.Auber.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;

@@ -1,20 +1,20 @@
-package com.group4.operAi;
+package com.group4.Auber.OperativeAI;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.group4.Map;
+import com.group4.Auber.MapRenderer;
 
 public class GridNode {
-    Map map;
+    MapRenderer map;
     public int x;
     public int y;
     int index;
     private Set<Pos> coords;
     private boolean calced = false;
     
-    public GridNode(Map map,int x, int y){
+    public GridNode(MapRenderer map, int x, int y){
         this.map = map;
         this.x = x;
         this.y = y;

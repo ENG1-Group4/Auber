@@ -1,4 +1,4 @@
-package com.group4;
+package com.group4.Auber;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -13,10 +13,9 @@ import java.util.Set;
  * The map render. Extended {@link com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer} and then added functionality to detect whether walls,
  * and healing etc
  *
- * @author Adam Wiegrand
- * @author Robert Watts
+ * @author Adam Wiegrand, Robert Watts
  */
-public class Map extends OrthogonalTiledMapRenderer {
+public class MapRenderer extends OrthogonalTiledMapRenderer {
 
     public int[][] intMap;
     public HashSet[][] objMap;
@@ -34,7 +33,7 @@ public class Map extends OrthogonalTiledMapRenderer {
      * @param strMap A string representation of of the map (from a file), using numbers. Each tile is a number
      *               with what each number means being set above
      */
-    public Map(TiledMap map, String strMap) {
+    public MapRenderer(TiledMap map, String strMap) {
         super(map);
         properties = map.getProperties();
 

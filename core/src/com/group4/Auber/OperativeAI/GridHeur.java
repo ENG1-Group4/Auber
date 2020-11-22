@@ -1,4 +1,4 @@
-package com.group4.operAi;
+package com.group4.Auber.OperativeAI;
 
 import com.badlogic.gdx.ai.pfa.Heuristic;
 import com.badlogic.gdx.math.Vector2;

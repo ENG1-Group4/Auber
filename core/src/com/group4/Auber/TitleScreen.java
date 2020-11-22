@@ -1,4 +1,4 @@
-package com.group4;
+package com.group4.Auber;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -38,7 +38,7 @@ public class TitleScreen extends ScreenAdapter {
         this.game = game;
         this.isMusicPlaying = isMusicPlaying;
         Operative.remainingOpers = 0;
-        GSystem.systemsRemaining.clear();
+        Systems.systemsRemaining.clear();
     }
 
     @Override
@@ -106,7 +106,7 @@ public class TitleScreen extends ScreenAdapter {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 menuSelect.play(0.2f);
-                game.setScreen(new Instructions(game));
+                game.setScreen(new InstructionsScreen(game));
             }
         });
 

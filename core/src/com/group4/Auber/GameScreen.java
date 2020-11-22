@@ -1,4 +1,4 @@
-package com.group4;
+package com.group4.Auber;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
-import com.group4.HUD.HUD;
+import com.group4.Auber.HUD.HUD;
 import org.json.*;
 
 
@@ -28,9 +28,9 @@ public class GameScreen extends ScreenAdapter {
     public AuberGame game;
     private Stage stage;
     private Player player;
-    private Map map;
+    private MapRenderer map;
     private OrthographicCamera camera;
-    private com.group4.HUD.HUD HUD;
+    private com.group4.Auber.HUD.HUD HUD;
     private final float CameraLerp = 2f;
     private SpriteBatch batch = new SpriteBatch();
     private SpriteBatch batch2 = new SpriteBatch();
@@ -61,11 +61,11 @@ public class GameScreen extends ScreenAdapter {
 
 
         //Load the map and create it
-        map = new Map(tiledMap, Gdx.files.internal("walkable_map.txt").readString());
+        map = new MapRenderer(tiledMap, Gdx.files.internal("walkable_map.txt").readString());
 
         //for game end stuff
         Player.game = game;
-        GSystem.game = game;
+        Systems.game = game;
         Operative.game = game;
         //Create the player and add it to the stage
         player = new Player(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1));
@@ -85,7 +85,7 @@ public class GameScreen extends ScreenAdapter {
 
         for (int i = 0; i < gameData.getJSONArray("rooms").length(); i++) {
             if (!gameData.getJSONArray("rooms").getJSONObject(i).isNull("systemCoords")) {
-                stage.addActor(new GSystem(
+                stage.addActor(new Systems(
                         gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(0),
                         gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(1),
                         map,
@@ -105,7 +105,7 @@ public class GameScreen extends ScreenAdapter {
                         ));
         }
 
-        HUD.setValues(Operative.remainingOpers,GSystem.systemsRemaining.size());
+        HUD.setValues(Operative.remainingOpers, Systems.systemsRemaining.size());
     }
 
     @Override

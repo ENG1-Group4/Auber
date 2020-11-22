@@ -1,13 +1,13 @@
-package com.group4.HUD;
+package com.group4.Auber.HUD;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.group4.GSystem;
-import com.group4.Operative;
-import com.group4.Player;
+import com.group4.Auber.Systems;
+import com.group4.Auber.Operative;
+import com.group4.Auber.Player;
 import org.json.JSONObject;
 
 /**
@@ -44,7 +44,7 @@ public class HUD extends Stage {
         this.addActor(notificationWindow);
 
         //Create the system health bar and add it to the stage
-        systemsHealthBar = new HealthBar(50, scaledWidth, "System Health", GSystem.systemsRemaining.size());
+        systemsHealthBar = new HealthBar(50, scaledWidth, "System Health", Systems.systemsRemaining.size());
         systemsHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight);
         this.addActor(systemsHealthBar);
 
@@ -122,7 +122,7 @@ public class HUD extends Stage {
     @Override
     public void draw(){
         super.draw();
-        systemsHealthBar.setCurrentValue(GSystem.systemsRemaining.size());
+        systemsHealthBar.setCurrentValue(Systems.systemsRemaining.size());
         operativesHealthBar.setCurrentValue(Operative.remainingOpers);
         this.act();
 
@@ -134,7 +134,7 @@ public class HUD extends Stage {
     }
 
     /**
-     * Set the start values of the operatives & system's
+     * Set the start values of the operatives and system's
      * @param numOfOperatives int number of operatives
      * @param numOfSystems int number of systems
      */

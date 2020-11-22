@@ -1,4 +1,4 @@
-package com.group4;
+package com.group4.Auber;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.pfa.GraphPath;
@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.audio.Sound;
-import com.group4.HUD.HUD;
-import com.group4.operAi.GridGraph;
-import com.group4.operAi.GridNode;
+import com.group4.Auber.HUD.HUD;
+import com.group4.Auber.OperativeAI.GridGraph;
+import com.group4.Auber.OperativeAI.GridNode;
 import java.lang.Math;
 import java.util.ArrayList;
 
@@ -19,13 +19,13 @@ public class Operative extends Actor {
   private final Texture imageAttack = new Texture(Gdx.files.internal("img/operative_attack.png"));
   private float offset = 6;//used to make the hitbox center on the image
   private float moveSpeed = 1.2f;
-  private Map map;
+  private MapRenderer map;
   private int health = 100;
-  private GSystem target;
+  private Systems target;
   private boolean isHacking = false;
   private boolean combat = false;
   public static int remainingOpers = 0;
-  private static ArrayList<GSystem> untargetedSystems = new ArrayList<GSystem>();;
+  private static ArrayList<Systems> untargetedSystems = new ArrayList<Systems>();;
   private int delay = 0;
   public static GridGraph pathfinder;
   private GraphPath<GridNode> currentPath;
@@ -33,22 +33,22 @@ public class Operative extends Actor {
   private Sound metalDeath = Gdx.audio.newSound(Gdx.files.internal("audio/metalDeath.mp3"));
   private HUD hud;
 
-  public Operative(int x, int y,Map map, HUD hud) {
+  public Operative(int x, int y, MapRenderer map, HUD hud) {
     this.map = map;
     this.hud = hud;
     remainingOpers += 1;
     setBounds(map.worldPos(x), map.worldPos(y),20f,20f);
     if (pathfinder == null){pathfinder = new GridGraph(map,x,y);}
-    if (untargetedSystems.size() == 0){untargetedSystems.addAll(GSystem.systemsRemaining);}
+    if (untargetedSystems.size() == 0){untargetedSystems.addAll(Systems.systemsRemaining);}
     chooseTarget();
   }
 
   public void chooseTarget() {
     if (untargetedSystems.size() == 0){
-      if (GSystem.systemsRemaining.size() == 0){
+      if (Systems.systemsRemaining.size() == 0){
         game.setScreen(new GameEndScreen(game, false));
       } else{
-        target = GSystem.systemsRemaining.get((int) Math.round(Math.random() * (GSystem.systemsRemaining.size() - 1)));
+        target = Systems.systemsRemaining.get((int) Math.round(Math.random() * (Systems.systemsRemaining.size() - 1)));
       }
     } else{
       target = untargetedSystems.get((int) Math.round(Math.random() * (untargetedSystems.size() - 1)));

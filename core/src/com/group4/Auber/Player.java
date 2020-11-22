@@ -1,4 +1,4 @@
-package com.group4;
+package com.group4.Auber;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -32,13 +32,13 @@ public class Player extends Actor {
     private Sound punch2 = Gdx.audio.newSound(Gdx.files.internal("audio/punch2.mp3"));
 
     private float playerSpeed = 1.5f;
-    public Map map;
+    public MapRenderer map;
     private int health = 100;
     private float healthTimer = 0;
     private long audioStart = 0;
     private int attackDelay = 0;
 
-    public Player(Map map,int x, int y){
+    public Player(MapRenderer map, int x, int y){
         this.map = map;
         setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
     }

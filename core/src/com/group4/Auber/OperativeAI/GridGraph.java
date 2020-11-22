@@ -1,4 +1,4 @@
-package com.group4.operAi;
+package com.group4.Auber.OperativeAI;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
@@ -6,16 +6,16 @@ import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
-import com.group4.Map;
+import com.group4.Auber.MapRenderer;
 
 public class GridGraph implements IndexedGraph<GridNode>{//this is the main pathfinding one
     GridHeur gridHeuristic = new GridHeur();
     Array<Connection<GridNode>>[][] paths;
     public GridNode[][] GridMap;
-    Map map;
+    MapRenderer map;
     private int lastNodeIndex = 0;
 
-    public GridGraph(Map map,int x, int y){//x and y of an internal position
+    public GridGraph(MapRenderer map, int x, int y){//x and y of an internal position
         this.map = map;
         GridMap = new GridNode[map.intMap.length][map.intMap[0].length];
         paths = new Array[map.intMap[0].length][];

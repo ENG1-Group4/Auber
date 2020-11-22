@@ -1,24 +1,24 @@
-package com.group4;
+package com.group4.Auber;
 import java.util.ArrayList;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.group4.HUD.HUD;
+import com.group4.Auber.HUD.HUD;
 
-public class GSystem extends Actor {
+public class Systems extends Actor {
     public static AuberGame game;
     public int health;
     int healthMax;
     String roomName;
-    Map map;
+    MapRenderer map;
     HUD hud;
     int healWait = 300;//how long before the system starts healing
     int delay = 0;
     int gridX;
     int gridY;
     int currentNotification = 0;
-    public static ArrayList<GSystem> systemsRemaining = new ArrayList<GSystem>();
+    public static ArrayList<Systems> systemsRemaining = new ArrayList<Systems>();
 
-    public GSystem(int x, int y, int w, int h, Map map, HUD hud, String roomName, int healthMax){
+    public Systems(int x, int y, int w, int h, MapRenderer map, HUD hud, String roomName, int healthMax){
         this.map = map;
         this.roomName = roomName;
         this.health = healthMax;
@@ -31,7 +31,7 @@ public class GSystem extends Actor {
         setBounds((float) x*tilewidth,(float) y*tilewidth,(float) w*(tilewidth - 1),(float) h*(tilewidth - 1));
         map.autoEnter(this);
     }
-    public GSystem(int x, int y, Map map, HUD hud, String roomName){//assumes 1x1 system
+    public Systems(int x, int y, MapRenderer map, HUD hud, String roomName){//assumes 1x1 system
         this(x,y,1,1,map, hud, roomName,100);
     }
     @Override
