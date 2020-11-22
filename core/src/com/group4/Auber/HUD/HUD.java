@@ -11,23 +11,45 @@ import com.group4.Auber.Player;
 import org.json.JSONObject;
 
 /**
- * Creates and loads the heads up display
+ * Creates and loads the heads up display.
  *
  * @author Robert Watts
  */
 public class HUD extends Stage {
 
-    private HealthBar systemsHealthBar;
-    private HealthBar operativesHealthBar;
-    Player player;
-    PlayerHealthBar playerHealthBar;
-    NotificationWindow notificationWindow;
-    TeleporterDialog teleporterDialog;
-    final private float heightScale = 1/7f;
-    final private float notificationWindowWidthScale = 3/8f;
-    final private float xOffset = 10;
-    final private float yOffset = 10;
+    protected HealthBar systemsHealthBar;
+    protected HealthBar operativesHealthBar;
+    protected Player player;
+    protected PlayerHealthBar playerHealthBar;
+    protected NotificationWindow notificationWindow;
+    protected TeleporterDialog teleporterDialog;
 
+    /**
+     * Used to calculate the height of the HUD as a fractional value of the screen
+     */
+    final protected float heightScale = 1/7f;
+
+    /**
+     * Used to calculate the width of the notification window as a fractional value of the screen
+     */
+    final protected float notificationWindowWidthScale = 3/8f;
+
+    /**
+     * Used to calculate the offset from the left or right of the screen
+     */
+    final protected float xOffset = 10;
+
+    /**
+     * Used to calculate the offset from the top or bottom of the screen
+     */
+    final protected float yOffset = 10;
+
+    /**
+     * Create the player health bar, notification window, system health bar, operative health bar and teleporter
+     * dialogue
+     * @param player The player object
+     * @param gameData the game data as a JSONObject
+     */
     public HUD(Player player, JSONObject gameData){
         this.player = player;
         float scaledHeight = Gdx.graphics.getHeight() * heightScale;
@@ -122,15 +144,16 @@ public class HUD extends Stage {
     @Override
     public void draw(){
         super.draw();
+        //Set the current values
         systemsHealthBar.setCurrentValue(Systems.systemsRemaining.size());
         operativesHealthBar.setCurrentValue(Operative.remainingOpers);
+
         this.act();
 
         //If the player moves off a teleporter pad hide the dialogue
         if (!teleporterDialog.isPlayerTouchingTeleporter()){
             teleporterDialog.hide();
         }
-
     }
 
     /**
@@ -139,8 +162,8 @@ public class HUD extends Stage {
      * @param numOfSystems int number of systems
      */
     public void setValues(int numOfOperatives, int numOfSystems){
-        operativesHealthBar.setMaxValue(numOfOperatives);
-        systemsHealthBar.setMaxValue(numOfSystems);
+        operativesHealthBar.setStartValue(numOfOperatives);
+        systemsHealthBar.setStartValue(numOfSystems);
     }
 
     /**

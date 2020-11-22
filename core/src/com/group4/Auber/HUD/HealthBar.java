@@ -16,23 +16,32 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * @author Robert Watts
  */
 public class HealthBar extends Actor {
-    final private ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+    /**
+     * The initial value of the health
+     */
+    protected int startValue;
+
+    /**
+     * The current value of the health
+     */
+    protected int currentValue;
+
     protected float width;
     protected float height;
     protected String title;
     protected BitmapFont font;
     protected final float barMargin = 10;
-    protected int startValue;
-    protected int currentValue;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     /**
      * Construct the class, and save the initial variables
      *
      * @param height the height of the bar
      * @param width the width of the bar
-     * @param font the font to use
-     * @param title the title used
+     * @param title the title used within the health bar
      * @param startValue the start value
+     * @param font the font to use
      */
     public HealthBar(float height, float width, String title, int startValue, BitmapFont font){
         this.startValue = startValue;
@@ -44,18 +53,24 @@ public class HealthBar extends Actor {
         shapeRenderer.setAutoShapeType(true);
     }
 
-
+    /**
+     *
+     * @param height the height of the bar
+     * @param width the width of the bar
+     * @param title the title used
+     * @param startValue the start value
+     */
     public HealthBar(float height, float width, String title, int startValue){
         this(height,width,title,startValue,new BitmapFont());
     }
 
 
-        /**
-         * Draw the class
-         *
-         * @param batch
-         * @param parentAlpha
-         */
+    /**
+     * Draw the health bar.
+     *
+     * @param batch The current batch from the satage
+     * @param parentAlpha The parent alpha
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         //Allow colours to blend
@@ -88,13 +103,13 @@ public class HealthBar extends Actor {
         //Render the text
         font.setColor(1,1,1,1f);
         font.draw(batch, getTextLayout(), barX + barMargin, barY+(barHeight/2) + (font.getXHeight()));
-
-
     }
 
     /**
-     * Set the current value of the health
-     * @param currentValue
+     * Set the current value of the health. This value is divided by startValue to get a percentage, which is then
+     * used to calculate the width of the health bar.
+     *
+     * @param currentValue the current value (integer)
      */
     public void setCurrentValue(int currentValue) {
         this.currentValue = currentValue;
@@ -109,12 +124,12 @@ public class HealthBar extends Actor {
     }
 
     /**
-     * Set the max value of the health
-     * @param maxValue
+     * Set the max value of the health. This value is used in conjunction with the current value to calculate the width
+     * of the health bar.
+     *
+     * @param startValue the initial value.
      */
-    public void setMaxValue(int maxValue) {
-        this.startValue = maxValue;
+    public void setStartValue(int startValue) {
+        this.startValue = startValue;
     }
-
-
 }

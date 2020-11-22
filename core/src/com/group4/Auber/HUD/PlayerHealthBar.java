@@ -17,13 +17,18 @@ import com.group4.Auber.Player;
  */
 public class PlayerHealthBar extends Actor {
 
-    final private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    float size;
-    Player player;
-    BitmapFont font;
-    Boolean setFontScale = true;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    protected float size;
+    protected Player player;
+    protected BitmapFont font;
 
     /**
+     * Used so that on the first draw, the font is scaled. This should be set to true whenever the window is resized.
+     */
+    protected Boolean setFontScale = true;
+
+    /**
+     * Create the health bar with the LibGDX default font from {@link com.badlogic.gdx.graphics.g2d.BitmapFont}.
      *
      * @param player the player
      * @param size the size of the circle
@@ -33,6 +38,7 @@ public class PlayerHealthBar extends Actor {
     }
 
     /**
+     * Create the health bar.
      *
      * @param player the player
      * @param size the size of the circle
@@ -45,6 +51,12 @@ public class PlayerHealthBar extends Actor {
         shapeRenderer.setAutoShapeType(true);
     }
 
+    /**
+     * Draw the health bar using the shape render.
+     *
+     * @param batch The current batch from the satage
+     * @param parentAlpha The parent alpha
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         float radius = size /2;
