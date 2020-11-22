@@ -62,13 +62,12 @@ public class GameScreen extends ScreenAdapter {
 
         //Load the map and create it
         map = new Map(tiledMap, Gdx.files.internal("map").readString());
-        String[] datas = Gdx.files.internal("mapdata").readString().split("\\r?\\n");
+
         //for game end stuff
         Player.game = game;
         GSystem.game = game;
         Operative.game = game;
         //Create the player and add it to the stage
-        String[] coords = datas[0].split(",");
         player = new Player(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1));
 
 
