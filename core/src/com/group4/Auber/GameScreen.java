@@ -22,6 +22,7 @@ import org.json.*;
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
  *
  * @author Robert Watts
+ * @author Adam Wiegand
  */
 public class GameScreen extends ScreenAdapter {
 
