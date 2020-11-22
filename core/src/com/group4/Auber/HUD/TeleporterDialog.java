@@ -1,11 +1,11 @@
-package com.group4.HUD;
+package com.group4.Auber.HUD;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.group4.Player;
+import com.group4.Auber.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -18,19 +18,31 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
  * @author Robert Watts
  */
 public class TeleporterDialog extends Dialog {
-    private int teleporterSize;
-    private Player player;
-    private HUD hud;
-    private ArrayList<int[]> teleporterPositions = new ArrayList<int[]>();
+    private final Player player;
+    private final HUD hud;
+    private final ArrayList<int[]> teleporterPositions = new ArrayList<int[]>();
+
+    /**
+     * The size of the teleporter in TMX squares
+     */
+    private final int teleporterSize;
+
+    /**
+     * The time it takes for the dialogue to fade in and out
+     */
     private final float fadeTime = 0.2f;
-    private Sound teleporterSounds = Gdx.audio.newSound(Gdx.files.internal("audio/teleporter.mp3"));
+
+    /**
+     * The teleporter sound. Played when the player moves position.
+     */
+    private final Sound teleporterSounds = Gdx.audio.newSound(Gdx.files.internal("audio/teleporter.mp3"));
 
     /**
      *
      * @param gameData A JSONObject with the game data. This is used to pull the locations of the teleporters.
      * @param player The player class
      * @param hud The HUD display - used for the notifications
-     * @param teleporterSize - The size in map squares of the teleporters (default should be 2 as they are 2x2)
+     * @param teleporterSize - The size in map squares (from the TMX file) of the teleporter's (default should be 2 as they are 2x2)
      */
     public TeleporterDialog(JSONObject gameData, Player player, HUD hud, int teleporterSize){
         super("Teleporters", new Skin(Gdx.files.internal("skin/uiskin.json")));
@@ -82,7 +94,8 @@ public class TeleporterDialog extends Dialog {
     }
 
     /**
-     * Called when there is a result from the disalouge
+     * Called when there is a result from the dialogue
+     *
      * @param object The object from the button
      */
     public void result(Object object){
@@ -97,18 +110,17 @@ public class TeleporterDialog extends Dialog {
             return;
         }
 
-        //Move the player to the center of the new teleporter
+        //Move the player to the center of the new teleporter and play teleporter the sound
         JSONArray coords = (JSONArray) object;
-        float teleporterOffset = teleporterSize / 2;
+        float teleporterOffset = teleporterSize / 2f;
         teleporterSounds.play(0.13f);
         player.setPosition(player.map.worldPos(coords.getInt(0) + teleporterOffset -0.125f),
                 player.map.worldPos(coords.getInt(1) + teleporterOffset - 0.25f));
 
     }
 
-
     /**
-     * See if the player is touching a teleporter
+     * See if the player is touching (or standing on) a teleporter
      *
      * @return boolean if the player is touching a teleporter
      */
@@ -116,22 +128,16 @@ public class TeleporterDialog extends Dialog {
 
         float teleporterWorldSize = player.map.worldPos(teleporterSize);
 
-         //For all the teleports
-        for (int i = 0; i < teleporterPositions.size(); i++) {
-
-            if (!(player.map.worldPos(teleporterPositions.get(i)[0]) >= player.getX() + player.getWidth() ||
-                    player.getX() >= player.map.worldPos(teleporterPositions.get(i)[0]) + teleporterWorldSize ||
-                    player.map.worldPos(teleporterPositions.get(i)[1]) >= player.getY() + player.getHeight() ||
-                    player.getY() >= player.map.worldPos(teleporterPositions.get(i)[1]) + teleporterWorldSize )) {
+         //For each of the teleports, check if the player is standing on it. If they are return true.
+        for (int[] teleporterPosition : teleporterPositions) {
+            if (!(player.map.worldPos(teleporterPosition[0]) >= player.getX() + player.getWidth() ||
+                    player.getX() >= player.map.worldPos(teleporterPosition[0]) + teleporterWorldSize ||
+                    player.map.worldPos(teleporterPosition[1]) >= player.getY() + player.getHeight() ||
+                    player.getY() >= player.map.worldPos(teleporterPosition[1]) + teleporterWorldSize)) {
                 return true;
             }
 
-
-
         }
-
         return false;
-
     }
-
 }

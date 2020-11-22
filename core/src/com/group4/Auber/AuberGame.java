@@ -1,7 +1,6 @@
-package com.group4;
+package com.group4.Auber;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -12,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  * alongside an implementation of {@link com.badlogic.gdx.Game} for use.
  *
  * @author Robert Watts
+ * @author Bogdan Bodnariu-Lescinschi
  */
 public class AuberGame extends Game {
 

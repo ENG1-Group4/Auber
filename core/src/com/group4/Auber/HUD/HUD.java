@@ -1,33 +1,55 @@
-package com.group4.HUD;
+package com.group4.Auber.HUD;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.group4.GSystem;
-import com.group4.Operative;
-import com.group4.Player;
+import com.group4.Auber.Systems;
+import com.group4.Auber.Operative;
+import com.group4.Auber.Player;
 import org.json.JSONObject;
 
 /**
- * Creates and loads the heads up display
+ * Creates and loads the heads up display.
  *
  * @author Robert Watts
  */
 public class HUD extends Stage {
 
-    private HealthBar systemsHealthBar;
-    private HealthBar operativesHealthBar;
-    Player player;
-    PlayerHealthBar playerHealthBar;
-    NotificationWindow notificationWindow;
-    TeleporterDialog teleporterDialog;
-    final private float heightScale = 1/7f;
-    final private float notificationWindowWidthScale = 3/8f;
-    final private float xOffset = 10;
-    final private float yOffset = 10;
+    protected HealthBar systemsHealthBar;
+    protected HealthBar operativesHealthBar;
+    protected Player player;
+    protected PlayerHealthBar playerHealthBar;
+    protected NotificationWindow notificationWindow;
+    protected TeleporterDialog teleporterDialog;
 
+    /**
+     * Used to calculate the height of the HUD as a fractional value of the screen
+     */
+    final protected float heightScale = 1/7f;
+
+    /**
+     * Used to calculate the width of the notification window as a fractional value of the screen
+     */
+    final protected float notificationWindowWidthScale = 3/8f;
+
+    /**
+     * Used to calculate the offset from the left or right of the screen
+     */
+    final protected float xOffset = 10;
+
+    /**
+     * Used to calculate the offset from the top or bottom of the screen
+     */
+    final protected float yOffset = 10;
+
+    /**
+     * Create the player health bar, notification window, system health bar, operative health bar and teleporter
+     * dialogue
+     * @param player The player object
+     * @param gameData the game data as a JSONObject
+     */
     public HUD(Player player, JSONObject gameData){
         this.player = player;
         float scaledHeight = Gdx.graphics.getHeight() * heightScale;
@@ -44,7 +66,7 @@ public class HUD extends Stage {
         this.addActor(notificationWindow);
 
         //Create the system health bar and add it to the stage
-        systemsHealthBar = new HealthBar(50, scaledWidth, "System Health", GSystem.systemsRemaining.size());
+        systemsHealthBar = new HealthBar(50, scaledWidth, "System Health", Systems.systemsRemaining.size());
         systemsHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight);
         this.addActor(systemsHealthBar);
 
@@ -122,25 +144,26 @@ public class HUD extends Stage {
     @Override
     public void draw(){
         super.draw();
-        systemsHealthBar.setCurrentValue(GSystem.systemsRemaining.size());
+        //Set the current values
+        systemsHealthBar.setCurrentValue(Systems.systemsRemaining.size());
         operativesHealthBar.setCurrentValue(Operative.remainingOpers);
+
         this.act();
 
         //If the player moves off a teleporter pad hide the dialogue
         if (!teleporterDialog.isPlayerTouchingTeleporter()){
             teleporterDialog.hide();
         }
-
     }
 
     /**
-     * Set the start values of the operatives & system's
+     * Set the start values of the operatives and system's
      * @param numOfOperatives int number of operatives
      * @param numOfSystems int number of systems
      */
     public void setValues(int numOfOperatives, int numOfSystems){
-        operativesHealthBar.setMaxValue(numOfOperatives);
-        systemsHealthBar.setMaxValue(numOfSystems);
+        operativesHealthBar.setStartValue(numOfOperatives);
+        systemsHealthBar.setStartValue(numOfSystems);
     }
 
     /**

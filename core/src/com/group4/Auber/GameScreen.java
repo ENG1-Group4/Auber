@@ -1,4 +1,4 @@
-package com.group4;
+package com.group4.Auber;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
-import com.group4.HUD.HUD;
+import com.group4.Auber.HUD.HUD;
 import org.json.*;
 
 
@@ -22,24 +22,62 @@ import org.json.*;
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
  *
  * @author Robert Watts
+ * @author Adam Wiegand
  */
 public class GameScreen extends ScreenAdapter {
 
     public AuberGame game;
     private Stage stage;
     private Player player;
-    private Map map;
+    private MapRenderer map;
     private OrthographicCamera camera;
-    private com.group4.HUD.HUD HUD;
+    private com.group4.Auber.HUD.HUD HUD;
+
+    /**
+     * The lerp of the camera, used for linear interpolation on the player movement to calculate the camera position
+     */
     private final float CameraLerp = 2f;
+
+    /**
+     * The sprite batch for everything except the map popup
+     */
     private SpriteBatch batch = new SpriteBatch();
-    private SpriteBatch batch2 = new SpriteBatch();
+
+    /**
+     * Used for the map pop up. This batch renders over the top of the normal batch when the map is open.
+     */
+    private SpriteBatch mapSpriteBatch = new SpriteBatch();
+
+    /**
+     * The background sounds
+     */
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
-    private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
-    private TextureRegion mapTexture = new TextureRegion(new Texture("mapScreen.png"), 0, 0, 1920, 1080);
-    private TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
+
+    /**
+     * The background image. Used for the paralax scrolling
+     */
+    private TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
+
+    /**
+     * The image displayed in the map popup
+     */
+    private TextureRegion mapPopupTexture = new TextureRegion(new Texture("img/mapScreen.png"), 0, 0, 1920, 1080);
+
+    /**
+     * The tiled map, from a TMX file.
+     */
+    private TiledMap tiledMap = new TmxMapLoader().load("auber_map.tmx");
+
+    /**
+     * The game data from a json file.
+     */
     JSONObject gameData = new JSONObject(Gdx.files.internal("mapdata.json").readString());
 
+    /**
+     * Create the game and start the background sounds playing
+     *
+     * @param game the AuberGame game
+     */
     public GameScreen (AuberGame game){
         this.game = game;
         ambience.play();
@@ -61,18 +99,15 @@ public class GameScreen extends ScreenAdapter {
 
 
         //Load the map and create it
-        map = new Map(tiledMap, Gdx.files.internal("map").readString());
-        String[] datas = Gdx.files.internal("mapdata").readString().split("\\r?\\n");
-        //for game end stuff
+        map = new MapRenderer(tiledMap, Gdx.files.internal("walkable_map.txt").readString());
+
+        //Give the actors the game class
         Player.game = game;
-        GSystem.game = game;
+        Systems.game = game;
         Operative.game = game;
+
         //Create the player and add it to the stage
-        String[] coords = datas[0].split(",");
         player = new Player(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1));
-
-
-
         stage.addActor(player);
 
         //Create the Heads up display
@@ -80,18 +115,17 @@ public class GameScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(HUD);
         HUD.infoNotification("System Log started...");
 
-        //String[] coords = datas[0].split(",");
-        //stage.addActor(new Player(Integer.parseInt(coords[0]),Integer.parseInt(coords[1]), map));
-        //create systems + add them to the stage
 
+        //create systems + add them to the stage
         for (int i = 0; i < gameData.getJSONArray("rooms").length(); i++) {
             if (!gameData.getJSONArray("rooms").getJSONObject(i).isNull("systemCoords")) {
-                stage.addActor(new GSystem(
+                stage.addActor(new Systems(
                         gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(0),
                         gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(1),
                         map,
                         this.HUD,
-                        gameData.getJSONArray("rooms").getJSONObject(i).getString("name")));
+                        gameData.getJSONArray("rooms").getJSONObject(i).getString("name"))
+                );
             }
         }
 
@@ -106,7 +140,7 @@ public class GameScreen extends ScreenAdapter {
                         ));
         }
 
-        HUD.setValues(Operative.remainingOpers,GSystem.systemsRemaining.size());
+        HUD.setValues(Operative.remainingOpers, Systems.systemsRemaining.size());
     }
 
     @Override
@@ -134,15 +168,17 @@ public class GameScreen extends ScreenAdapter {
         //Draw the HUD
         HUD.draw();
 
+        //Leave the game if the secape key is pressed
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
             ambience.stop();
             game.setScreen(new TitleScreen(game, false));
         }
 
+        //Show the map if the M key is pressed
         if (Gdx.input.isKeyPressed(Keys.M)){
-            batch2.begin();
-            batch2.draw(mapTexture, 0, 0);
-            batch2.end();
+            mapSpriteBatch.begin();
+            mapSpriteBatch.draw(mapPopupTexture, 0, 0);
+            mapSpriteBatch.end();
         }
     }
 
@@ -156,11 +192,9 @@ public class GameScreen extends ScreenAdapter {
     public void dispose(){
         ambience.dispose();
         batch.dispose();
-        batch2.dispose();
+        mapSpriteBatch.dispose();
         map.dispose();
         stage.dispose();
         HUD.dispose();
     }
-
-
 }

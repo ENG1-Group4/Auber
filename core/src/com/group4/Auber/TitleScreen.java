@@ -1,4 +1,4 @@
-package com.group4;
+package com.group4.Auber;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -23,28 +23,52 @@ import com.badlogic.gdx.Input.Keys;
  * TitleScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the title screen.
  *
  * @author Robert Watts
+ * @author Bogdan Bodnariu-Lescinschi
  */
 public class TitleScreen extends ScreenAdapter {
 
     public AuberGame game;
     private Stage stage;
-    private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-Pink.png"), 0, 0, 1920, 1080);
-    private SpriteBatch batch = new SpriteBatch();
-    private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
-    public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
-    private boolean isMusicPlaying;
+    private final SpriteBatch batch = new SpriteBatch();
 
+    /**
+     * A flag to see if there is music playing from a previous screen
+     */
+    private final boolean isMusicPlaying;
+
+    /**
+     * The background music for the menu
+     */
+    public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
+
+
+    /**
+     * Load the background image
+     */
+    private final TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
+
+    /**
+     * The sound made when the user selects a button
+     */
+    private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
+
+
+    /**
+     * Create the the title screen screen.
+     * @param game the AuberGame instance
+     * @param isMusicPlaying whether their is music currently playing
+     */
     public TitleScreen (AuberGame game, boolean isMusicPlaying){
         this.game = game;
         this.isMusicPlaying = isMusicPlaying;
         Operative.remainingOpers = 0;
-        GSystem.systemsRemaining.clear();
+        Systems.systemsRemaining.clear();
     }
 
     @Override
     public void show() {
 
-        if(isMusicPlaying == false){
+        if(!isMusicPlaying){
             menuMusic.play();
             menuMusic.setVolume(0.1f);
             menuMusic.setLooping(true);
@@ -59,16 +83,16 @@ public class TitleScreen extends ScreenAdapter {
         table.setFillParent(true);
 
         //Create the logo and add it to the table
-        Texture logoTexture = new Texture(Gdx.files.internal("menu/auberLogo.png"));
+        Texture logoTexture = new Texture(Gdx.files.internal("img/menu/auberLogo.png"));
         Image logo = new Image(logoTexture);
         table.add(logo).pad(10).fillY().align(Align.center);
         table.row();
 
         //Create the start game button, add it to the table with its click event
         ImageButton.ImageButtonStyle playStyle =  new ImageButton.ImageButtonStyle();
-        playStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonInactive.png"))));
-        playStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonActive.png"))));
-        playStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/playButtonActive.png"))));
+        playStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/playButtonInactive.png"))));
+        playStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/playButtonActive.png"))));
+        playStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/playButtonActive.png"))));
         ImageButton playButton = new ImageButton(playStyle);
         table.add(playButton).center().pad(5);
         table.row();
@@ -81,6 +105,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                //Stop the music playing and change the screen to the game screen
                 menuMusic.stop();
                 GameEndScreen.menuMusic.stop();
                 menuSelect.play(0.2f);
@@ -90,9 +115,9 @@ public class TitleScreen extends ScreenAdapter {
 
         //Create the instructions button, add it to the table with its click event
         ImageButton.ImageButtonStyle instructionsStyle =  new ImageButton.ImageButtonStyle();
-        instructionsStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonInactive.png"))));
-        instructionsStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonActive.png"))));
-        instructionsStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/instructionsButtonActive.png"))));
+        instructionsStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/instructionsButtonInactive.png"))));
+        instructionsStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/instructionsButtonActive.png"))));
+        instructionsStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/instructionsButtonActive.png"))));
         ImageButton instructionsButton = new ImageButton(instructionsStyle);
         table.add(instructionsButton).center().pad(5);
         table.row();
@@ -106,15 +131,15 @@ public class TitleScreen extends ScreenAdapter {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 menuSelect.play(0.2f);
-                game.setScreen(new Instructions(game));
+                game.setScreen(new InstructionsScreen(game));
             }
         });
 
         //Create the quit game button, add it to the table with its click event
         ImageButton.ImageButtonStyle quitStyle =  new ImageButton.ImageButtonStyle();
-        quitStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonInactive.png"))));
-        quitStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonActive.png"))));
-        quitStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menu/quitButtonActive.png"))));
+        quitStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/quitButtonInactive.png"))));
+        quitStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/quitButtonActive.png"))));
+        quitStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/quitButtonActive.png"))));
         ImageButton quitButton = new ImageButton(quitStyle);
         table.add(quitButton).center().pad(5);
         table.row();
@@ -140,11 +165,11 @@ public class TitleScreen extends ScreenAdapter {
         //Set the background colour & draw the stage
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
+
+        //Draw the batch and stage
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
         batch.end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
