@@ -8,26 +8,49 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
 import com.group4.Auber.MapRenderer;
 
-public class GridGraph implements IndexedGraph<GridNode>{//this is the main pathfinding one
+/**
+ *  Used to calculate how the operative needs to move by following the path. This is the main pathfinding class used
+ *  by the {@link com.group4.Auber.Operative}.
+ *
+ * @author Adam Wiegrand
+ */
+public class GridGraph implements IndexedGraph<GridNode>{
     GridHeur gridHeuristic = new GridHeur();
     Array<Connection<GridNode>>[][] paths;
     public GridNode[][] GridMap;
     MapRenderer map;
     private int lastNodeIndex = 0;
 
-    public GridGraph(MapRenderer map, int x, int y){//x and y of an internal position
+    /**
+     * Create the graph from the map.
+     *
+     * @param map the map representation
+     * @param x The initial X coordinate
+     * @param y The initial Y coordinate
+     */
+    public GridGraph(MapRenderer map, int x, int y){
         this.map = map;
         GridMap = new GridNode[map.intMap.length][map.intMap[0].length];
         paths = new Array[map.intMap[0].length][];
+
+        //Create connections between all touching tiles on the map
         for (int i = 0; i < map.intMap.length; i++) {
             paths[i] = new Array[map.intMap[0].length];
             for (int j = 0; j < map.intMap.length ; j++) {
                 paths[i][j] = new Array<Connection<GridNode>>();
             }
         }
+
         addNode(x,y);
         Tree(x,y);
     }
+
+    /**
+     * Creates a tree with all the different paths to the coordinates (X,Y)
+     *
+     * @param x The x coordinate
+     * @param y The Y coordinate
+     */
     private void Tree(int x, int y){
         for (GridNode.Pos coord : GridMap[x][y].ConnectingCoords()) {
             if (GridMap[coord.x][coord.y] == null){
@@ -39,36 +62,61 @@ public class GridGraph implements IndexedGraph<GridNode>{//this is the main path
             }
         }
     }
+
+    /**
+     * Adds a node. This could the starting position of a operative, or the position of a system. A node is a
+     * starting point or destination.
+     *
+     * @param x The x coordinate of the node
+     * @param y The Y coordinate of the node
+     */
     public void addNode(int x, int y){
         GridNode node = new GridNode(map,x,y);
         node.index = lastNodeIndex;
         lastNodeIndex++;
         GridMap[x][y] = node;
-  }
-  public GraphPath<GridNode> findPath(GridNode startNode, GridNode goalNode){
-    GraphPath<GridNode> path = new DefaultGraphPath<>();
-    new IndexedAStarPathFinder<>(this).searchNodePath(startNode, goalNode, gridHeuristic, path);
-    return path;
-  }
+    }
 
-  public GraphPath<GridNode> findPath(int startX,int startY, int goalX, int goalY){// map coords
-    GraphPath<GridNode> path = new DefaultGraphPath<>();
-    new IndexedAStarPathFinder<>(this).searchNodePath(GridMap[startX][startY], GridMap[goalX][goalY], gridHeuristic, path);
-    return path;
-  }
+    /**
+     *  Finds the path between two nodes. This uses a A* search algorithm to find the most optimum route.
+     *
+     * @param startNode The start node as a GridNode object
+     * @param goalNode The end node as a GridNode object
+     * @return the best path
+     */
+    public GraphPath<GridNode> findPath(GridNode startNode, GridNode goalNode){
+        GraphPath<GridNode> path = new DefaultGraphPath<>();
+        new IndexedAStarPathFinder<>(this).searchNodePath(startNode, goalNode, gridHeuristic, path);
+        return path;
+    }
 
-  @Override
-  public Array<Connection<GridNode>> getConnections(GridNode fromNode) {
-      return paths[fromNode.x][fromNode.y];
-  }
+    /**
+     *  Finds the path between two points.
+     *
+     * @param startX The X coordinate of the start position
+     * @param startY The Y coordinate of the start position
+     * @param goalX The X coordinate of the end position
+     * @param goalY The Y coordinate of the end position
+     * @return the best path
+     */
+    public GraphPath<GridNode> findPath(int startX,int startY, int goalX, int goalY){// map coords
+        GraphPath<GridNode> path = new DefaultGraphPath<>();
+        new IndexedAStarPathFinder<>(this).searchNodePath(GridMap[startX][startY], GridMap[goalX][goalY], gridHeuristic, path);
+        return path;
+    }
 
-  @Override
-  public int getIndex(GridNode node) {
-      return node.index;
-  }
+    @Override
+    public Array<Connection<GridNode>> getConnections(GridNode fromNode) {
+        return paths[fromNode.x][fromNode.y];
+    }
 
-  @Override
-  public int getNodeCount() {
-      return lastNodeIndex;
-  }
+    @Override
+    public int getIndex(GridNode node) {
+        return node.index;
+    }
+
+    @Override
+    public int getNodeCount() {
+        return lastNodeIndex;
+    }
 }
