@@ -35,9 +35,9 @@ public class GameScreen extends ScreenAdapter {
     private SpriteBatch batch = new SpriteBatch();
     private SpriteBatch batch2 = new SpriteBatch();
     private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
-    private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-pink.png"), 0, 0, 1920, 1080);
-    private TextureRegion mapTexture = new TextureRegion(new Texture("mapScreen.png"), 0, 0, 1920, 1080);
-    private TiledMap tiledMap = new TmxMapLoader().load("auber_map_4.0_base.tmx");
+    private TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
+    private TextureRegion mapTexture = new TextureRegion(new Texture("img/mapScreen.png"), 0, 0, 1920, 1080);
+    private TiledMap tiledMap = new TmxMapLoader().load("auber_map.tmx");
     JSONObject gameData = new JSONObject(Gdx.files.internal("mapdata.json").readString());
 
     public GameScreen (AuberGame game){
@@ -61,7 +61,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         //Load the map and create it
-        map = new Map(tiledMap, Gdx.files.internal("map").readString());
+        map = new Map(tiledMap, Gdx.files.internal("walkable_map.txt").readString());
 
         //for game end stuff
         Player.game = game;

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="1">
- <tileset firstgid="1" source="auber_tileset4.tsx"/>
- <tileset firstgid="101" source="tileset.tsx"/>
- <tileset firstgid="613" source="teleporter.tsx"/>
- <tileset firstgid="617" source="props1.tsx"/>
- <tileset firstgid="873" source="props2.tsx"/>
- <tileset firstgid="1129" source="infirmary tileset.tsx"/>
- <tileset firstgid="1321" source="dark tileset.tsx"/>
- <tileset firstgid="1577" source="Nebula Aqua-Pink.tsx"/>
+ <tileset firstgid="1" source="tilesets/auber_tileset4.tsx"/>
+ <tileset firstgid="101" source="tilesets/tileset.tsx"/>
+ <tileset firstgid="613" source="tilesets/teleporter.tsx"/>
+ <tileset firstgid="617" source="tilesets/props1.tsx"/>
+ <tileset firstgid="873" source="tilesets/props2.tsx"/>
+ <tileset firstgid="1129" source="tilesets/infirmary tileset.tsx"/>
+ <tileset firstgid="1321" source="tilesets/dark tileset.tsx"/>
+ <tileset firstgid="1577" source="tilesets/Nebula Aqua-Pink.tsx"/>
  <layer id="14" name="BACKGROUND" width="60" height="60" visible="0">
   <data encoding="csv">
 7356,7357,7358,7359,7360,7361,7362,7363,7364,7365,7366,7367,7368,7369,7370,7371,7372,7373,7374,7375,7376,7377,7378,7379,7380,7381,7382,7383,7384,7385,7386,7387,7388,7389,7390,7391,7392,7393,7394,7395,7396,7397,7398,7399,7400,7401,7402,7403,7404,7405,7406,7407,7408,7409,7410,7411,7412,7413,7414,7415,

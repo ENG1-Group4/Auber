@@ -21,7 +21,7 @@ public class GameEndScreen extends ScreenAdapter {
     public AuberGame game;
     private boolean playerWon;
     private Stage stage;
-    private TextureRegion backgroundTexture = new TextureRegion(new Texture("Nebula Aqua-Pink.png"), 0, 0, 1920, 1080);
+    private TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
     private Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("menu/menuSelect.ogg"));
     private SpriteBatch batch = new SpriteBatch();
     public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
@@ -44,14 +44,14 @@ public class GameEndScreen extends ScreenAdapter {
         if(playerWon == true){
             menuMusic.play();
             menuMusic.setVolume(0.1f);
-            Texture gameWin = new Texture(Gdx.files.internal("gameWin.png"));
+            Texture gameWin = new Texture(Gdx.files.internal("img/gameWin.png"));
             Image win = new Image(gameWin);
             table.add(win).width(win.getWidth()*2.3f).height(win.getHeight()*2.3f).pad(40).align(Align.center);
             table.row();
         } else {
             menuMusic.play();
             menuMusic.setVolume(0.1f);
-            Texture gameEnd = new Texture(Gdx.files.internal("gameOver.png"));
+            Texture gameEnd = new Texture(Gdx.files.internal("img/gameOver.png"));
             Image end = new Image(gameEnd);
             table.add(end).width(end.getWidth()*2.5f).height(end.getHeight()*2.5f).pad(40).align(Align.center);
             table.row();
