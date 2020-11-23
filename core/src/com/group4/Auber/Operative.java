@@ -90,18 +90,22 @@ public class Operative extends Actor {
    * @param map The map
    * @param hud the HUD
    */
+  /**
+   * is this operative dead?
+   */
+  private boolean dead = false;
   public Operative(int x, int y, MapRenderer map, HUD hud) {
     this.map = map;
     this.hud = hud;
-    remainingOpers += 1;
-    setBounds(map.worldPos(x), map.worldPos(y),20f,20f);
 
     //Create the path finder
     if (pathfinder == null){pathfinder = new GridGraph(map,x,y);}
 
-    //Add all the systems to untargetedSystems
-    if (untargetedSystems.size() == 0){untargetedSystems.addAll(Systems.systemsRemaining);}
+    //Add all the systems to untargetedSystems, if this is the first operative made
+    if (remainingOpers == 0){untargetedSystems.addAll(Systems.systemsRemaining);}
 
+    remainingOpers += 1;
+    setBounds(map.worldPos(x), map.worldPos(y),20f,20f);
     chooseTarget();
   }
 
@@ -127,25 +131,32 @@ public class Operative extends Actor {
 
   @Override
   public void draw(Batch batch, float parentAlpha) {
+    if (dead){//prevents problems caused by race conditions (where they are killed and then draw is run)
+      return;
+    }
     //If the operative is hacking
     if (isHacking){
-
-      //delay == A - 1, A is the number of frames an oponent must spend hacking to damage the system
-      if (delay == 18 - 1){
-
-        //damage dealt per A frames
-        target.onHit(this, 1);
-
-        batch.draw(imageAttack,getX() - hitboxOffset,getY() - hitboxOffset,32,32);
-
-        //is the target dead
-        if (target.health <= 0){
-          isHacking = false;
-          chooseTarget();
-        }
-        delay = 0;
+      if (target.health <= 0){//reached an already killed system
+        isHacking = false;
+        chooseTarget();
       } else{
-        delay += 1;
+        //delay == A - 1, A is the number of frames an oponent must spend hacking to damage the system
+        if (delay == 18 - 1){
+
+          //damage dealt per A frames
+          target.onHit(this, 1);
+
+          batch.draw(imageAttack,getX() - hitboxOffset,getY() - hitboxOffset,32,32);
+
+          //is the target dead
+          if (target.health <= 0){
+            isHacking = false;
+            chooseTarget();
+          }
+          delay = 0;
+        } else{
+          delay += 1;
+        }
       }
     }
 
@@ -194,12 +205,8 @@ public class Operative extends Actor {
       //Check if we should start hacking
       if (getX() - hitboxOffset == target.getX() && getY() - hitboxOffset == target.getY()){
         isHacking = true;
-        batch.draw(image, getX() - hitboxOffset, getY() - hitboxOffset, image.getWidth(), image.getHeight());
-        return;
       }
-
     }
-
     // Draw the image
     batch.draw(image, getX() - hitboxOffset, getY() - hitboxOffset, image.getWidth(), image.getHeight());
   }
@@ -252,8 +259,10 @@ public class Operative extends Actor {
       isHacking = false;
       untargetedSystems.add(target);
       delay = 0;
+      if (combat == false){//combat just entered
+        currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), map.gridPos(by.getX()),map.gridPos(by.getY()));
+      }
       combat = true;
-      currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), map.gridPos(by.getX()),map.gridPos(by.getY()));
       nodeNum = 0;
 
       //Reduce the health if the player, and make sure the operative is not dead
@@ -268,6 +277,7 @@ public class Operative extends Actor {
    * Called when the operative dies
    */
   public void onDeath(){
+    dead = true;
     map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
     remainingOpers -= 1;
 
