@@ -117,6 +117,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         //create systems + add them to the stage
+        Systems.systemsRemaining.clear();
         for (int i = 0; i < gameData.getJSONArray("rooms").length(); i++) {
             if (!gameData.getJSONArray("rooms").getJSONObject(i).isNull("systemCoords")) {
                 stage.addActor(new Systems(
@@ -130,6 +131,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
         //create operatives + add them to the stage
+        Operative.remainingOpers = 0;
         for (int i = 0; i < gameData.getJSONArray("operativeStartCoords").length(); i++) {
             stage.addActor(
                     new Operative(

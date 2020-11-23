@@ -52,8 +52,6 @@ public class GameEndScreen extends ScreenAdapter {
     public GameEndScreen (AuberGame game, boolean playerWon){
         this.game = game;
         this.playerWon = playerWon;
-        Operative.remainingOpers = 0;
-        Systems.systemsRemaining.clear();
     }
 
     @Override
