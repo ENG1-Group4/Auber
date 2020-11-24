@@ -83,6 +83,11 @@ public class Operative extends Actor {
   private final Texture imageAttack = new Texture(Gdx.files.internal("img/operative_attack.png"));
 
   /**
+   * is this operative dead?
+   */
+  private boolean dead = false;
+
+  /**
    * Create the operative at starting point
    *
    * @param x The X coordinate of the starting position
@@ -90,10 +95,6 @@ public class Operative extends Actor {
    * @param map The map
    * @param hud the HUD
    */
-  /**
-   * is this operative dead?
-   */
-  private boolean dead = false;
   public Operative(int x, int y, MapRenderer map, HUD hud) {
     this.map = map;
     this.hud = hud;
